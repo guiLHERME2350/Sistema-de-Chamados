@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Chamado</title>
+
+    <link rel="stylesheet" href="CSS/chamado.css">
+</head>
+
+<body>
+
+    <!-- MENU LATERAL -->
+    <aside class="sidebar">
+
+        <h1>HelpDesk</h1>
+
+        <nav class="menu">
+
+            <a href="dashboard.html" class="menu-item">
+                <p>Home</p>
+            </a>
+
+            <a href="abrirchamado.html" class="menu-item" id="menuAbrirChamado">
+                <p>Abrir chamado</p>
+            </a>
+
+            <a href="meuschamados.html" class="menu-item" id="menuMeusChamados">
+                <p>Meus chamados</p>
+            </a>
+
+            <a href="#" class="menu-item" id="menuRelatorios">
+                <p>Relatórios</p>
+            </a>
+
+            <a href="#" class="menu-item" id="menuConfiguracoes">
+                <p>Configurações</p>
+            </a>
+
+        </nav>
+
+        <button id="btnSair" class="btn-sair">
+            <span></span>
+            Sair
+        </button>
+
+    </aside>
+
+
+    <!-- CONTEÚDO -->
+    <main class="conteudo">
+
+        <!-- CARD DO CHAMADO -->
+        <div class="card-chamado">
+
+            <h1>
+                Chamado <span id="chamadoexecucao">-</span>
+            </h1>
+
+
+            <div class="campo">
+
+                <label>Título:</label>
+
+                <p id="tituloChamado">
+                    Carregando...
+                </p>
+
+            </div>
+
+
+            <!-- INFORMAÇÕES -->
+            <div class="informacoes">
+
+                <div class="campo">
+
+                    <label>Categoria</label>
+
+                    <p id="categoriaChamado">
+                        -
+                    </p>
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label>Prioridade</label>
+
+                    <p id="prioridadeChamado">
+                        -
+                    </p>
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label>Status</label>
+
+                    <p id="statusChamado">
+                        -
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="campo">
+
+
+<div class="campo" id="acoesTecnico">
+
+    <label>Ações</label>
+
+    <div class="botoes-chamado">
+
+        <button
+            type="button"
+            id="btnAssumirChamado">
+            Assumir chamado
+        </button>
+
+        <button
+            type="button"
+            id="btnResolverChamado">
+            Resolver chamado
+        </button>
+
+    </div>
+
+</div>
+
+
+            <!-- DESCRIÇÃO -->
+            <div class="campo descricao">
+
+                <label>Descrição</label>
+
+                <p id="descricaoChamado">
+                    Carregando...
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- CARD DE MENSAGENS -->
+        <div class="card-mensagens">
+
+            <h3>Conversa</h3>
+
+            <div id="mensagens">
+
+                <!-- As mensagens aparecerão aqui -->
+
+            </div>
+
+
+            <form id="formMensagem">
+
+                <input
+                    type="text"
+                    id="mensagem"
+                    placeholder="Digite sua mensagem..."
+                >
+
+                <button type="submit">
+                    Enviar
+                </button>
+
+            </form>
+
+        </div>
+
+    </main>
+
+
+    <script type="module" src="chamado.js"></script>
+
+</body>
+
+</html>

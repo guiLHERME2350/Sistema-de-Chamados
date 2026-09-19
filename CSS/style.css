@@ -1,0 +1,42 @@
+body{
+    background: linear-gradient(
+        to bottom,
+        #050505 0%,
+        #c789f3 35%,
+        #e5e5e5 35%,
+        #e5e5e5 100%
+    );
+}
+
+form{
+    width: 250px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin: 200px auto;
+    gap: 20px;
+    flex-direction: column;
+    display: flex;
+    background: wh;
+    
+}
+
+input{
+    padding: 15px;
+    border-radius: 30px;
+}
+
+label{
+    text-align: center;
+}
+
+
+h1{
+    color: rgb(245, 244, 247);
+    text-align: center;
+    margin: 100px;
+}
+
+button{
+    border-radius: 60px;
+    padding: 10px;
+    width: 100%;
+}

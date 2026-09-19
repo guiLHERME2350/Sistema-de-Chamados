@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus chamados</title>
+    <link rel="stylesheet" href="CSS/meuschamados.css">
+</head>
+<body>
+
+    <aside class="sidebar">
+
+        <h1>HelpDesk</h1>
+
+        <nav class="menu">
+
+    <a href="dashboard.html" class="menu-item">
+        <p>Home</p>
+    </a>
+
+    <a href="abrirchamado.html" class="menu-item" id="menuAbrirChamado">
+        <p>Abrir chamado</p>
+    </a>
+
+    <a href="meuschamados.html" class="menu-item" id="menuMeusChamados">
+        <p>Meus chamados</p>
+    </a>
+
+    <a href="#" class="menu-item" id="menuRelatorios">
+        <p>Relatórios</p>
+    </a>
+
+    <a href="#" class="menu-item" id="menuConfiguracoes">
+        <p>Configurações</p>
+    </a>
+
+</nav>
+
+        <button id="btnSair" class="btn-sair">
+            <span></span> 
+            Sair
+        </button>
+    </aside>
+
+    <main>
+        
+        <section class="todosmeuschamados">
+
+            <h1>Meus Chamados:</h1>
+
+        <div class="filtros-chamados">
+
+        <button type="button" id="btnFila" class="filtro-ativo">
+            Fila de atendimento
+        </button>
+
+        <button type="button" id="btnHistorico">
+            Histórico
+        </button>
+
+        </div>
+            <div class="card-chamados">
+
+                <div class="tabela-container">
+               <table>
+                    <thead>
+                        <tr>
+                            <th>Id:</th>
+                            <th>Titulo:</th>
+                            <th>Categoria:</th>
+                            <th>Prioridade:</th>
+                            <th>Data de Abertura:</th>
+                            <th id="cabecalhoDataResolucao" style="display : nome;">
+                                Data de Resolução:
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tabelaChamados">
+                        
+                    </tbody>
+               </table>
+               </div>
+            </div>
+
+        </section>
+    </main>
+
+    <script type="module" src="meuschamados.js"></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abertura de Chamado</title>
+    <link rel="stylesheet" href="CSS/abrirchamado.css">
+</head>
+<body>
+    <header><h1>Abertura de Chamado / HelpDesk</h1></header>
+
+    <aside class="sidebar">
+
+        <h1>HelpDesk</h1>
+    <nav class="menu">
+
+    <a href="dashboard.html" class="menu-item">
+        <p>Home</p>
+    </a>
+
+    <a href="abrirchamado.html" class="menu-item" id="menuAbrirChamado">
+        <p>Abrir chamado</p>
+    </a>
+
+    <a href="meuschamados.html" class="menu-item" id="menuMeusChamados">
+        <p>Meus chamados</p>
+    </a>
+
+    <a href="#" class="menu-item" id="menuRelatorios">
+        <p>Relatórios</p>
+    </a>
+
+    <a href="#" class="menu-item" id="menuConfiguracoes">
+        <p>Configurações</p>
+    </a>
+
+</nav>
+        <button id="btnSair" class="btn-sair">
+            <span></span> 
+            Sair
+        </button>
+    </aside>
+
+    
+    <main>
+        <form id="formularioChamado">
+            <label for="textotitulo">Titulo:</label>
+            <input type="text" name="textotitulo" id="titulo" maxlength="50">
+
+            <label for="Emailatribuicao">Categoria:</label>
+            <input type="text" name="textocategoria" id="categoria">
+            
+            <label for="prioridade">Prioridade:</label>
+
+            <select name="prioridade" id="prioridade">
+            <option value="Muito Alta">Muito Alta</option>
+            <option value="Alta">Alta</option>
+            <option value="Baixa">Baixa</option>
+            </select>
+
+
+            <label for="">Descrição:</label>
+            <textarea name="descricao" id="descricao"></textarea>
+
+
+            <button id="enviardado" type="submit">Enviar solicitação</button>
+        </form>
+    </main>
+    <script type="module" src="abrirchamado.js"></script>
+</body>
+</html>
