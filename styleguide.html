@@ -1,5 +1,171 @@
 <!doctype html>
-<html lang="pt-BR">
-<head><meta charset="UTF-8"><title>styleguide · HelpDesk</title><link rel="stylesheet" href="/src/styles/main.css"></head>
-<body><div class="app" id="app"><main id="conteudo" class="page" tabindex="-1"><p>Em construção</p></main></div></body>
+<html lang="pt-BR" data-theme="system">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Styleguide · HelpDesk</title>
+    <meta name="description" content="Catálogo do design system do HelpDesk: tokens, componentes e estados.">
+    <meta name="robots" content="noindex">
+    <meta name="theme-color" content="#0f0d13">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+    <script>
+        /* Aplica as preferências antes do primeiro paint (espelha src/js/core/theme.js) */
+        (function () {
+            try {
+                var p = JSON.parse(localStorage.getItem("hd:prefs") || "{}");
+                var r = document.documentElement;
+                r.dataset.theme = p.theme || "system";
+                r.dataset.systemTheme = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+                r.dataset.motion = p.motion || "system";
+                r.dataset.density = p.density || "comfortable";
+                r.dataset.sidebar = p.sidebar || "expanded";
+            } catch (e) {}
+        })();
+    </script>
+    <link rel="stylesheet" href="/src/styles/main.css">
+    <link rel="stylesheet" href="/src/styles/pages/styleguide.css">
+</head>
+<body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+    <header class="sg-topbar">
+        <div class="brand sg-topbar__brand">
+            <span class="brand__mark" id="sg-marca"></span>
+            <span class="sg-topbar__title">
+                <span class="brand__name">HelpDesk</span>
+                <span class="sg-topbar__tag">Design system</span>
+            </span>
+        </div>
+
+        <div class="sg-topbar__controls">
+            <label class="sg-control">
+                <span class="sg-control__label">Movimento</span>
+                <select class="select sg-control__select" id="pref-motion">
+                    <option value="system">Sistema</option>
+                    <option value="reduce">Reduzir</option>
+                    <option value="full">Completo</option>
+                </select>
+            </label>
+            <label class="sg-control">
+                <span class="sg-control__label">Densidade</span>
+                <select class="select sg-control__select" id="pref-density">
+                    <option value="comfortable">Confortável</option>
+                    <option value="compact">Compacta</option>
+                </select>
+            </label>
+            <button class="btn btn--secondary btn--icon" type="button" id="alternar-tema" aria-label="Alternar tema"></button>
+        </div>
+    </header>
+
+    <div class="sg-layout">
+        <nav class="sg-nav" aria-label="Seções do styleguide">
+            <ul class="sg-nav__list" id="sg-nav-lista"></ul>
+        </nav>
+
+        <main id="conteudo" class="sg-main" tabindex="-1">
+            <header class="sg-intro">
+                <p class="page-header__eyebrow">Ferramenta de desenvolvimento</p>
+                <h1>Styleguide</h1>
+                <p class="sg-intro__text">
+                    Todos os componentes da fundação com seus estados. Troque tema, movimento e densidade na barra
+                    do topo para validar cada combinação.
+                </p>
+            </header>
+
+            <section class="sg-section" id="cores" aria-labelledby="cores-t">
+                <h2 id="cores-t">Cores</h2>
+                <p class="sg-section__desc">Tokens de <code>tokens.css</code>. O contraste mostrado é contra <code>--surface-1</code>.</p>
+                <div class="sg-demo" data-demo="cores"></div>
+            </section>
+
+            <section class="sg-section" id="tipografia" aria-labelledby="tipografia-t">
+                <h2 id="tipografia-t">Tipografia</h2>
+                <p class="sg-section__desc">Plus Jakarta Sans na interface; JetBrains Mono para números e identificadores.</p>
+                <div class="sg-demo" data-demo="tipografia"></div>
+            </section>
+
+            <section class="sg-section" id="forma" aria-labelledby="forma-t">
+                <h2 id="forma-t">Raios, sombras e espaço</h2>
+                <p class="sg-section__desc">No tema escuro a profundidade vem mais da borda do que da sombra.</p>
+                <div class="sg-demo" data-demo="forma"></div>
+            </section>
+
+            <section class="sg-section" id="botoes" aria-labelledby="botoes-t">
+                <h2 id="botoes-t">Botões</h2>
+                <p class="sg-section__desc"><code>.btn</code> com variantes, tamanhos, só ícone, desabilitado e <code>aria-busy="true"</code>.</p>
+                <div class="sg-demo" data-demo="botoes"></div>
+            </section>
+
+            <section class="sg-section" id="campos" aria-labelledby="campos-t">
+                <h2 id="campos-t">Campos</h2>
+                <p class="sg-section__desc">Rótulo fixo, ícone, dica, contador e erro com <code>aria-invalid</code> + <code>aria-describedby</code>.</p>
+                <div class="sg-demo" data-demo="campos"></div>
+            </section>
+
+            <section class="sg-section" id="selecao" aria-labelledby="selecao-t">
+                <h2 id="selecao-t">Chips, segmentado e switch</h2>
+                <p class="sg-section__desc">Categorias em chips, prioridade no controle segmentado (com o tom de cada uma) e interruptores.</p>
+                <div class="sg-demo" data-demo="selecao"></div>
+            </section>
+
+            <section class="sg-section" id="cards" aria-labelledby="cards-t">
+                <h2 id="cards-t">Cards</h2>
+                <p class="sg-section__desc">Padrão, interativo (eleva no hover) e stat card em cada tom.</p>
+                <div class="sg-demo" data-demo="cards"></div>
+            </section>
+
+            <section class="sg-section" id="badges" aria-labelledby="badges-t">
+                <h2 id="badges-t">Badges</h2>
+                <p class="sg-section__desc">Gerados por <code>components/badges.js</code> — nunca só cor: sempre ponto + texto.</p>
+                <div class="sg-demo" data-demo="badges"></div>
+            </section>
+
+            <section class="sg-section" id="tabela" aria-labelledby="tabela-t">
+                <h2 id="tabela-t">Tabela responsiva</h2>
+                <p class="sg-section__desc">Abaixo de 768 px cada linha vira um card (rótulos via <code>data-label</code>). A linha inteira é clicável pelo <code>.row-link</code>.</p>
+                <div class="sg-demo" data-demo="tabela"></div>
+            </section>
+
+            <section class="sg-section" id="abas" aria-labelledby="abas-t">
+                <h2 id="abas-t">Abas</h2>
+                <p class="sg-section__desc"><code>criarAbas()</code>: indicador deslizante, setas, Home e End.</p>
+                <div class="sg-demo" data-demo="abas"></div>
+            </section>
+
+            <section class="sg-section" id="avatares" aria-labelledby="avatares-t">
+                <h2 id="avatares-t">Avatares</h2>
+                <p class="sg-section__desc">Iniciais com matiz derivada do nome — a mesma pessoa sempre tem a mesma cor.</p>
+                <div class="sg-demo" data-demo="avatares"></div>
+            </section>
+
+            <section class="sg-section" id="skeletons" aria-labelledby="skeletons-t">
+                <h2 id="skeletons-t">Skeletons</h2>
+                <p class="sg-section__desc">Linhas, cards e lista. O shimmer para em movimento reduzido.</p>
+                <div class="sg-demo" data-demo="skeletons"></div>
+            </section>
+
+            <section class="sg-section" id="vazio" aria-labelledby="vazio-t">
+                <h2 id="vazio-t">Estado vazio</h2>
+                <p class="sg-section__desc"><code>estadoVazio()</code> com ícone, texto e ação.</p>
+                <div class="sg-demo" data-demo="vazio"></div>
+            </section>
+
+            <section class="sg-section" id="feedback" aria-labelledby="feedback-t">
+                <h2 id="feedback-t">Toasts e confirmação</h2>
+                <p class="sg-section__desc"><code>toast.*()</code> nos 4 tons (um com ação) e <code>confirmar()</code> com <code>&lt;dialog&gt;</code> nativo.</p>
+                <div class="sg-demo" data-demo="feedback"></div>
+            </section>
+
+            <section class="sg-section" id="movimento" aria-labelledby="movimento-t">
+                <h2 id="movimento-t">Movimento</h2>
+                <p class="sg-section__desc">Utilitários de <code>utils/motion.js</code>. Com "Reduzir" selecionado no topo, tudo fica instantâneo.</p>
+                <div class="sg-demo" data-demo="movimento"></div>
+            </section>
+        </main>
+    </div>
+    <script type="module" src="/src/js/pages/styleguide.js"></script>
+</body>
 </html>

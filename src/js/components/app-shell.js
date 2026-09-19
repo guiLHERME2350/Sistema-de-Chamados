@@ -68,15 +68,20 @@ function sidebar(perfil, pagina) {
             dataset: { collapseToggle: "" },
             "aria-label": "Recolher menu",
             title: "Recolher menu",
-            onClick: () => {
-                const recolhido = getPrefs().sidebar === "collapsed";
-                setPref("sidebar", recolhido ? "expanded" : "collapsed");
-                recolher.setAttribute("aria-label", recolhido ? "Recolher menu" : "Expandir menu");
-            },
+            onClick: () => setPref("sidebar", getPrefs().sidebar === "collapsed" ? "expanded" : "collapsed"),
         },
         icon(ChevronsLeft),
         h("span", { class: "nav-item__label" }, "Recolher")
     );
+
+    // A preferência também muda pela página de Configurações
+    const sincronizarRecolher = () => {
+        const texto = getPrefs().sidebar === "collapsed" ? "Expandir menu" : "Recolher menu";
+        recolher.setAttribute("aria-label", texto);
+        recolher.title = texto;
+    };
+    window.addEventListener("hd:prefs", sincronizarRecolher);
+    sincronizarRecolher();
 
     const rodape = h(
         "div",

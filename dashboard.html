@@ -1,5 +1,91 @@
 <!doctype html>
-<html lang="pt-BR">
-<head><meta charset="UTF-8"><title>dashboard · HelpDesk</title><link rel="stylesheet" href="/src/styles/main.css"></head>
-<body><div class="app" id="app"><main id="conteudo" class="page" tabindex="-1"><p>Em construção</p></main></div></body>
+<html lang="pt-BR" data-theme="system">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Início · HelpDesk</title>
+    <meta name="description" content="Visão geral dos seus chamados: números em tempo real, chamados recentes e fila de atendimento.">
+    <meta name="theme-color" content="#0f0d13">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+    <script>
+        /* Aplica as preferências antes do primeiro paint (espelha src/js/core/theme.js) */
+        (function () {
+            try {
+                var p = JSON.parse(localStorage.getItem("hd:prefs") || "{}");
+                var r = document.documentElement;
+                r.dataset.theme = p.theme || "system";
+                r.dataset.systemTheme = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+                r.dataset.motion = p.motion || "system";
+                r.dataset.density = p.density || "comfortable";
+                r.dataset.sidebar = p.sidebar || "expanded";
+            } catch (e) {}
+        })();
+    </script>
+    <link rel="stylesheet" href="/src/styles/main.css">
+    <link rel="stylesheet" href="/src/styles/pages/dashboard.css">
+</head>
+<body>
+    <div class="app" id="app">
+        <main id="conteudo" class="page dash" tabindex="-1" aria-busy="true">
+            <header class="page-header">
+                <div class="page-header__text">
+                    <span class="page-header__eyebrow" id="dash-data">
+                        <span class="skeleton" style="--w: 180px; --h: 12px" aria-hidden="true"></span>
+                    </span>
+                    <h1 id="dash-titulo">
+                        <span class="sr-only">Início</span>
+                        <span class="skeleton" style="--w: 260px; --h: 34px" aria-hidden="true"></span>
+                    </h1>
+                    <p class="page-header__subtitle" id="dash-subtitulo">
+                        <span class="skeleton" style="--w: 220px; --h: 14px" aria-hidden="true"></span>
+                    </p>
+                </div>
+                <div class="page-header__actions">
+                    <a class="btn btn--primary" href="abrir-chamado.html" id="dash-novo">Novo chamado</a>
+                </div>
+            </header>
+
+            <div id="dash-painel" class="dash__painel">
+                <section aria-labelledby="dash-resumo-titulo">
+                    <h2 id="dash-resumo-titulo" class="sr-only">Resumo</h2>
+                    <div class="dash-stats" id="dash-stats" role="status" aria-live="polite">
+                        <span class="sr-only">Carregando…</span>
+                        <div class="skeleton-card dash-stats__skeleton" aria-hidden="true"><span class="skeleton" style="--w: 50%; --h: 12px"></span><span class="skeleton" style="--w: 40%; --h: 36px"></span><span class="skeleton" style="--w: 70%; --h: 10px"></span></div>
+                        <div class="skeleton-card dash-stats__skeleton" aria-hidden="true"><span class="skeleton" style="--w: 50%; --h: 12px"></span><span class="skeleton" style="--w: 40%; --h: 36px"></span><span class="skeleton" style="--w: 70%; --h: 10px"></span></div>
+                        <div class="skeleton-card dash-stats__skeleton" aria-hidden="true"><span class="skeleton" style="--w: 50%; --h: 12px"></span><span class="skeleton" style="--w: 40%; --h: 36px"></span><span class="skeleton" style="--w: 70%; --h: 10px"></span></div>
+                        <div class="skeleton-card dash-stats__skeleton" aria-hidden="true"><span class="skeleton" style="--w: 50%; --h: 12px"></span><span class="skeleton" style="--w: 40%; --h: 36px"></span><span class="skeleton" style="--w: 70%; --h: 10px"></span></div>
+                    </div>
+                </section>
+
+                <div class="dash-grid" id="dash-grid">
+                    <section class="card card--flush dash-bloco" aria-labelledby="dash-recentes-titulo">
+                        <div class="dash-bloco__header">
+                            <h2 class="card__title" id="dash-recentes-titulo">Chamados recentes</h2>
+                            <a class="dash-link" href="chamados.html">Ver todos <span aria-hidden="true">→</span></a>
+                        </div>
+                        <div id="dash-recentes">
+                            <div role="status" aria-live="polite">
+                                <span class="sr-only">Carregando…</span>
+                                <div class="skeleton-row" aria-hidden="true"><span class="skeleton" style="--w: 56px"></span><div style="flex: 1; display: grid; gap: 8px"><span class="skeleton" style="--w: 60%"></span><span class="skeleton" style="--w: 35%; --h: 10px"></span></div><span class="skeleton" style="--w: 80px; --h: 22px; --r: 999px"></span></div>
+                                <div class="skeleton-row" aria-hidden="true"><span class="skeleton" style="--w: 56px"></span><div style="flex: 1; display: grid; gap: 8px"><span class="skeleton" style="--w: 72%"></span><span class="skeleton" style="--w: 30%; --h: 10px"></span></div><span class="skeleton" style="--w: 80px; --h: 22px; --r: 999px"></span></div>
+                                <div class="skeleton-row" aria-hidden="true"><span class="skeleton" style="--w: 56px"></span><div style="flex: 1; display: grid; gap: 8px"><span class="skeleton" style="--w: 52%"></span><span class="skeleton" style="--w: 40%; --h: 10px"></span></div><span class="skeleton" style="--w: 80px; --h: 22px; --r: 999px"></span></div>
+                                <div class="skeleton-row" aria-hidden="true"><span class="skeleton" style="--w: 56px"></span><div style="flex: 1; display: grid; gap: 8px"><span class="skeleton" style="--w: 66%"></span><span class="skeleton" style="--w: 28%; --h: 10px"></span></div><span class="skeleton" style="--w: 80px; --h: 22px; --r: 999px"></span></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="dash-lateral" id="dash-lateral">
+                        <div class="skeleton-card" aria-hidden="true"><span class="skeleton" style="--w: 45%; --h: 14px"></span><span class="skeleton" style="--w: 90%"></span><span class="skeleton" style="--w: 80%"></span><span class="skeleton" style="--w: 70%"></span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="dash-erro" hidden></div>
+        </main>
+    </div>
+    <script type="module" src="/src/js/pages/dashboard.js"></script>
+</body>
 </html>

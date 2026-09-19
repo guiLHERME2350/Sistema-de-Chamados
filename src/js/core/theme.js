@@ -62,5 +62,9 @@ export function movimentoReduzido() {
     return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-midiaTema.addEventListener("change", () => aplicarPrefs());
+// Tema do sistema mudou: quem depende de temaAtual() (ícone da topbar, gráficos) precisa saber
+midiaTema.addEventListener("change", () => {
+    aplicarPrefs();
+    window.dispatchEvent(new CustomEvent("hd:prefs", { detail: getPrefs() }));
+});
 aplicarPrefs();

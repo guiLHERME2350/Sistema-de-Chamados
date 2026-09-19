@@ -1,0 +1,326 @@
+@layer pages {
+    /* ---------- Cabeçalho ---------- */
+    .rel-acoes {
+        align-items: center;
+        width: 100%;
+    }
+
+    .rel-periodo {
+        flex: 1 1 280px;
+        margin: 0;
+        min-inline-size: 0;
+    }
+
+    .rel-periodo .segmented__option::before {
+        display: none;
+    }
+
+    .rel-acoes .btn {
+        flex: 0 0 auto;
+    }
+
+    @media (min-width: 640px) {
+        .rel-acoes {
+            width: auto;
+        }
+
+        .rel-periodo {
+            flex: 0 0 auto;
+            min-width: 340px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        /* mantém os 4 períodos numa linha no celular */
+        .rel-periodo {
+            grid-auto-flow: column;
+            grid-template-columns: none;
+        }
+
+        .rel-acoes .btn {
+            flex: 1 1 100%;
+        }
+    }
+
+    /* ---------- KPIs: 2 / 3 / 6 colunas ---------- */
+    .rel-kpis {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--space-3);
+        margin-bottom: var(--space-5);
+    }
+
+    @media (min-width: 768px) {
+        .rel-kpis {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: var(--space-4);
+        }
+    }
+
+    @media (min-width: 1440px) {
+        .rel-kpis {
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+        }
+    }
+
+    .rel-kpis .stat {
+        padding: var(--space-4);
+    }
+
+    .rel-kpis .stat__value {
+        font-size: var(--fs-xl);
+        white-space: nowrap;
+    }
+
+    .rel-kpis .stat__icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .rel-kpis .stat__icon svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    @media (max-width: 639px) {
+        .rel-kpis .stat__icon {
+            display: none;
+        }
+
+        .rel-kpis .stat {
+            grid-template-columns: 1fr;
+            grid-template-areas: "label" "value" "meta";
+        }
+    }
+
+    /* ---------- Grade de gráficos ---------- */
+    .rel-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--space-4);
+    }
+
+    @media (min-width: 1024px) {
+        .rel-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: var(--space-5);
+        }
+
+        .rel-card--largo {
+            grid-column: 1 / -1;
+        }
+    }
+
+    .rel-card {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+    .rel-card .card__header {
+        flex-wrap: wrap;
+        margin-bottom: var(--space-3);
+    }
+
+    .rel-card__meta {
+        color: var(--text-subtle);
+        font-size: var(--fs-xs);
+    }
+
+    .rel-card__titulo-icone {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-2);
+    }
+
+    .rel-card__titulo-icone svg {
+        width: 18px;
+        height: 18px;
+        color: var(--warning);
+    }
+
+    .rel-card__vazio {
+        margin: auto 0;
+        padding: var(--space-6) 0;
+        color: var(--text-muted);
+        font-size: var(--fs-sm);
+        text-align: center;
+    }
+
+    /* Altura fixa: o Chart.js usa maintainAspectRatio: false */
+    .rel-grafico {
+        position: relative;
+        height: 260px;
+    }
+
+    .rel-card--largo .rel-grafico {
+        height: 280px;
+    }
+
+    .rel-grafico--barras {
+        height: clamp(220px, calc(var(--barras, 5) * 40px + 40px), 380px);
+    }
+
+    @media (min-width: 1024px) {
+        .rel-card--largo .rel-grafico {
+            height: 320px;
+        }
+    }
+
+    .rel-grafico canvas {
+        max-width: 100%;
+    }
+
+    .rel-legenda {
+        display: flex;
+        gap: var(--space-4);
+        margin-left: auto;
+        color: var(--text-muted);
+        font-size: var(--fs-xs);
+        font-weight: var(--fw-medium);
+    }
+
+    .rel-legenda span {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-2);
+    }
+
+    .rel-legenda span::before {
+        content: "";
+        width: 14px;
+        height: 3px;
+        border-radius: var(--radius-full);
+        background: var(--cor);
+    }
+
+    /* ---------- "Ver dados" ---------- */
+    .rel-dados {
+        margin-top: var(--space-4);
+        border-top: 1px solid var(--border);
+        padding-top: var(--space-3);
+    }
+
+    .rel-dados summary {
+        display: inline-flex;
+        align-items: center;
+        min-height: var(--tap);
+        color: var(--text-muted);
+        font-size: var(--fs-sm);
+        font-weight: var(--fw-medium);
+        cursor: pointer;
+        list-style-position: inside;
+    }
+
+    .rel-dados summary:hover {
+        color: var(--text);
+    }
+
+    .rel-dados .table-wrap {
+        max-height: 280px;
+        overflow: auto;
+        margin-top: var(--space-2);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+    }
+
+    .rel-dados .table th[scope="row"] {
+        position: static;
+        padding: var(--row-pad-y) var(--space-4);
+        border-bottom: 1px solid var(--border);
+        background: none;
+        color: var(--text);
+        font-size: var(--fs-sm);
+        font-weight: var(--fw-regular);
+        text-transform: none;
+        letter-spacing: 0;
+    }
+
+    .rel-dados .table tr:last-child th[scope="row"] {
+        border-bottom: 0;
+    }
+
+    .rel-dados .num-col {
+        text-align: right;
+    }
+
+    /* ---------- Ranking de técnicos ---------- */
+    .rel-ranking {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-3);
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .rel-ranking__item {
+        display: grid;
+        grid-template-columns: 1.5rem auto minmax(0, 1fr);
+        align-items: center;
+        gap: var(--space-3);
+    }
+
+    .rel-ranking__pos {
+        color: var(--text-subtle);
+        font-size: var(--fs-sm);
+        text-align: center;
+    }
+
+    .rel-ranking__item:first-child .rel-ranking__pos {
+        color: var(--warning);
+        font-weight: var(--fw-bold);
+    }
+
+    .rel-ranking__info {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        min-width: 0;
+    }
+
+    .rel-ranking__linha {
+        display: flex;
+        justify-content: space-between;
+        gap: var(--space-3);
+        font-size: var(--fs-sm);
+    }
+
+    .rel-ranking__nome {
+        font-weight: var(--fw-medium);
+    }
+
+    .rel-ranking__barra {
+        display: block;
+        height: 8px;
+        overflow: hidden;
+        border-radius: var(--radius-full);
+        background: var(--surface-2);
+    }
+
+    .rel-ranking__preenchimento {
+        display: block;
+        width: calc(var(--p, 0) * 100%);
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, color-mix(in oklch, var(--success) 70%, transparent), var(--success));
+        transform-origin: left center;
+        animation: grow-x var(--dur-slow) var(--ease-out) backwards;
+        animation-delay: calc(var(--i, 0) * var(--stagger) + 120ms);
+    }
+
+    .rel-ranking__meta {
+        color: var(--text-subtle);
+        font-size: var(--fs-xs);
+    }
+
+    :root[data-motion="reduce"] .rel-ranking__preenchimento {
+        animation: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        :root:not([data-motion="full"]) .rel-ranking__preenchimento {
+            animation: none;
+        }
+    }
+}

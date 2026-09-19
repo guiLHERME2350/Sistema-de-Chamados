@@ -333,3 +333,10 @@
     outline: none;
     box-shadow: var(--focus-ring);
 }
+
+.input:disabled,
+.textarea:disabled,
+.select:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}

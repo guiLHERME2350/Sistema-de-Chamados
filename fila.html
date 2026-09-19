@@ -1,5 +1,75 @@
 <!doctype html>
-<html lang="pt-BR">
-<head><meta charset="UTF-8"><title>fila · HelpDesk</title><link rel="stylesheet" href="/src/styles/main.css"></head>
-<body><div class="app" id="app"><main id="conteudo" class="page" tabindex="-1"><p>Em construção</p></main></div></body>
+<html lang="pt-BR" data-theme="system">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Fila · HelpDesk</title>
+    <meta name="description" content="Fila de atendimento em quadro Kanban: arraste os chamados entre Aberto, Em análise e Resolvido.">
+    <meta name="theme-color" content="#0f0d13">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+    <script>
+        /* Aplica as preferências antes do primeiro paint (espelha src/js/core/theme.js) */
+        (function () {
+            try {
+                var p = JSON.parse(localStorage.getItem("hd:prefs") || "{}");
+                var r = document.documentElement;
+                r.dataset.theme = p.theme || "system";
+                r.dataset.systemTheme = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+                r.dataset.motion = p.motion || "system";
+                r.dataset.density = p.density || "comfortable";
+                r.dataset.sidebar = p.sidebar || "expanded";
+            } catch (e) {}
+        })();
+    </script>
+    <link rel="stylesheet" href="/src/styles/main.css">
+    <link rel="stylesheet" href="/src/styles/pages/fila.css">
+</head>
+<body>
+    <div class="app" id="app">
+        <main id="conteudo" class="page fila" tabindex="-1">
+            <header class="page-header">
+                <div class="page-header__text">
+                    <span class="page-header__eyebrow">Atendimento</span>
+                    <h1>Fila</h1>
+                    <p class="page-header__subtitle">Arraste os cartões entre as colunas ou use o botão “Mover para…” de cada chamado.</p>
+                </div>
+            </header>
+
+            <form class="fila-filtros" id="fila-filtros" role="search" aria-label="Filtrar a fila">
+                <div class="field fila-filtros__busca">
+                    <label class="sr-only" for="fila-busca">Buscar por título ou número</label>
+                    <div class="input-wrap" id="fila-busca-wrap">
+                        <input class="input" id="fila-busca" name="q" type="search" placeholder="Buscar por título ou número…" autocomplete="off" spellcheck="false">
+                    </div>
+                </div>
+                <div class="field fila-filtros__prioridade">
+                    <label class="sr-only" for="fila-prioridade">Prioridade</label>
+                    <select class="select" id="fila-prioridade" name="prioridade">
+                        <option value="">Todas as prioridades</option>
+                    </select>
+                </div>
+                <label class="switch fila-filtros__meus" title="A coluna Aberto continua mostrando a fila livre">
+                    <input type="checkbox" role="switch" id="fila-meus" name="meus">
+                    <span>Só os meus</span>
+                </label>
+            </form>
+
+            <div class="tabs fila-abas" id="fila-abas" role="tablist" aria-label="Colunas do quadro">
+                <button class="tabs__tab" type="button" role="tab" aria-selected="true" data-value="aberto" aria-controls="coluna-aberto">Aberto <span class="count" data-count="aberto">–</span></button>
+                <button class="tabs__tab" type="button" role="tab" aria-selected="false" data-value="analise" aria-controls="coluna-analise">Em análise <span class="count" data-count="analise">–</span></button>
+                <button class="tabs__tab" type="button" role="tab" aria-selected="false" data-value="resolvido" aria-controls="coluna-resolvido">Resolvido <span class="count" data-count="resolvido">–</span></button>
+            </div>
+
+            <div class="kanban" id="kanban" aria-busy="true">
+                <!-- colunas montadas por src/js/pages/fila.js -->
+            </div>
+
+            <div class="sr-only" id="fila-anuncio" aria-live="polite"></div>
+        </main>
+    </div>
+    <script type="module" src="/src/js/pages/fila.js"></script>
+</body>
 </html>

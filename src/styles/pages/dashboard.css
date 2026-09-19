@@ -1,0 +1,360 @@
+@layer pages {
+    .dash {
+        container: dash / inline-size;
+    }
+
+    .dash .page-header h1 {
+        font-size: var(--fs-xl);
+    }
+
+    .dash__painel {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-5);
+    }
+
+    /* ---------- Stat cards: 2 colunas no mobile, 4 quando há espaço ---------- */
+    .dash-stats {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--space-3);
+    }
+
+    .dash-stats__skeleton {
+        min-height: 132px;
+    }
+
+    @container dash (min-width: 760px) {
+        .dash-stats {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: var(--space-4);
+        }
+    }
+
+    .dash-stats .stat {
+        min-width: 0;
+        padding: var(--space-4);
+    }
+
+    /* Valor do tempo médio é texto ("3h 20min"): um pouco menor para caber */
+    .stat--tempo .stat__value {
+        font-size: var(--fs-xl);
+        white-space: nowrap;
+    }
+
+    /* Celular estreito: ícone sobe para cima do rótulo e os números encolhem */
+    @container dash (max-width: 479px) {
+        .dash-stats .stat {
+            grid-template-columns: 1fr;
+            grid-template-areas:
+                "icon"
+                "label"
+                "value"
+                "meta";
+        }
+
+        .dash-stats .stat__icon {
+            width: 36px;
+            height: 36px;
+            margin-bottom: var(--space-1);
+        }
+
+        .dash-stats .stat__value {
+            font-size: var(--fs-xl);
+        }
+
+        .stat--tempo .stat__value {
+            font-size: var(--fs-lg);
+        }
+    }
+
+    /* ---------- Grade principal: recentes + coluna lateral ---------- */
+    .dash-grid {
+        display: grid;
+        gap: var(--space-5);
+        align-items: start;
+    }
+
+    @media (min-width: 1024px) {
+        .dash-grid {
+            grid-template-columns: minmax(0, 1.6fr) minmax(300px, 1fr);
+        }
+    }
+
+    .dash-lateral {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-5);
+        min-width: 0;
+    }
+
+    .dash-bloco__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-3);
+        padding: var(--space-4) var(--space-5);
+        border-bottom: 1px solid var(--border);
+    }
+
+    .dash-bloco__header .card__title {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-2);
+    }
+
+    .dash-bloco__header .card__title:focus {
+        outline: none;
+    }
+
+    .dash-bloco__rodape {
+        padding: var(--space-3) var(--space-5);
+        border-top: 1px solid var(--border);
+    }
+
+    .dash-link {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-1);
+        min-height: var(--tap);
+        color: var(--brand);
+        font-size: var(--fs-sm);
+        font-weight: var(--fw-semibold);
+        white-space: nowrap;
+    }
+
+    .dash-link span {
+        display: inline-block;
+        transition: transform var(--dur-fast) var(--ease-out);
+    }
+
+    .dash-link:hover span {
+        transform: translateX(3px);
+    }
+
+    /* ---------- Itens de lista (linha inteira clicável) ---------- */
+    .dash-lista {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .dash-item {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--space-2);
+        padding: var(--space-4) var(--space-5);
+        border-bottom: 1px solid var(--border);
+        transition: background-color var(--dur-fast) var(--ease-out);
+    }
+
+    .dash-item:last-child {
+        border-bottom: 0;
+    }
+
+    .dash-item:hover {
+        background: var(--surface-2);
+    }
+
+    .dash-item:has(.dash-item__link:focus-visible) {
+        box-shadow: inset 0 0 0 2px var(--brand);
+    }
+
+    .dash-item__link {
+        display: flex;
+        align-items: baseline;
+        gap: var(--space-3);
+        min-width: 0;
+        color: var(--text);
+        font-weight: var(--fw-semibold);
+    }
+
+    .dash-item__link:focus-visible {
+        outline: none;
+    }
+
+    /* Estende o link sobre a linha toda */
+    .dash-item__link::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+    }
+
+    .dash-item__numero {
+        flex-shrink: 0;
+        color: var(--text-muted);
+        font-size: var(--fs-sm);
+        font-weight: var(--fw-medium);
+    }
+
+    .dash-item__titulo {
+        min-width: 0;
+    }
+
+    .dash-item__badges,
+    .dash-item__meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--space-2) var(--space-3);
+        min-width: 0;
+    }
+
+    .dash-item__meta {
+        color: var(--text-muted);
+        font-size: var(--fs-xs);
+    }
+
+    .dash-item__categoria,
+    .dash-item__pessoa {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .dash-item__categoria svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .dash-item__pessoa .avatar {
+        --size: 22px;
+    }
+
+    .dash-item__tempo {
+        font-variant-numeric: tabular-nums;
+    }
+
+    /* Recentes em cards largos: título + badges na mesma linha */
+    @container (min-width: 560px) {
+        .dash-item:not(.dash-item--fila) {
+            grid-template-columns: minmax(0, 1fr) auto;
+            grid-template-areas:
+                "link badges"
+                "meta meta";
+            column-gap: var(--space-4);
+        }
+
+        .dash-item:not(.dash-item--fila) .dash-item__link { grid-area: link; }
+        .dash-item:not(.dash-item--fila) .dash-item__badges { grid-area: badges; justify-content: flex-end; }
+        .dash-item:not(.dash-item--fila) .dash-item__meta { grid-area: meta; }
+    }
+
+    /* Fila: botão "Assumir" à direita, acima do link esticado */
+    .dash-item--fila {
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-areas:
+            "link acao"
+            "meta acao";
+        align-items: center;
+        column-gap: var(--space-3);
+    }
+
+    .dash-item--fila .dash-item__link { grid-area: link; }
+    .dash-item--fila .dash-item__meta { grid-area: meta; }
+
+    .dash-item__acao {
+        grid-area: acao;
+        position: relative;
+        z-index: 1;
+    }
+
+    @container (max-width: 340px) {
+        .dash-item--fila {
+            grid-template-areas:
+                "link link"
+                "meta acao";
+        }
+
+        .dash-item__acao span {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+        }
+    }
+
+    .dash-fila-vazia {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+        padding: var(--space-5);
+    }
+
+    .dash-fila-vazia__icone {
+        display: grid;
+        place-items: center;
+        width: 40px;
+        height: 40px;
+        flex-shrink: 0;
+        border-radius: var(--radius-md);
+        background: var(--success-soft);
+        color: var(--success);
+        animation: pop-in var(--dur-slow) var(--ease-spring) backwards;
+    }
+
+    .dash-fila-vazia__icone svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    /* ---------- Barras de prioridade ---------- */
+    .dash-bloco--prioridades .card__header {
+        margin-bottom: var(--space-4);
+    }
+
+    .dash-barras {
+        display: grid;
+        gap: var(--space-3);
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .dash-barra {
+        display: grid;
+        grid-template-columns: 6.5rem minmax(0, 1fr) 2.5rem;
+        align-items: center;
+        gap: var(--space-3);
+        font-size: var(--fs-sm);
+    }
+
+    .dash-barra__rotulo {
+        color: var(--text-muted);
+        white-space: nowrap;
+    }
+
+    .dash-barra__trilho {
+        height: 10px;
+        overflow: hidden;
+        border-radius: var(--radius-full);
+        background: var(--surface-2);
+    }
+
+    .dash-barra__preenchimento {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+        background: var(--tone);
+        transform: scaleX(var(--escala, 0));
+        transform-origin: left center;
+        transition: transform var(--dur-slow) var(--ease-out);
+    }
+
+    .dash-barra__valor {
+        text-align: right;
+        font-weight: var(--fw-semibold);
+    }
+
+    .dash-barras__vazio {
+        margin-top: var(--space-3);
+    }
+
+    #dash-erro .empty-state {
+        padding-block: var(--space-7);
+    }
+}

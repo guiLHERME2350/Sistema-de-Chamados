@@ -1,5 +1,128 @@
 <!doctype html>
-<html lang="pt-BR">
-<head><meta charset="UTF-8"><title>index · HelpDesk</title><link rel="stylesheet" href="/src/styles/main.css"></head>
-<body><div class="app" id="app"><main id="conteudo" class="page" tabindex="-1"><p>Em construção</p></main></div></body>
+<html lang="pt-BR" data-theme="system">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Entrar · HelpDesk</title>
+    <meta name="description" content="Acesse o HelpDesk para abrir, acompanhar e resolver chamados de suporte.">
+    <meta name="theme-color" content="#0f0d13">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+    <script>
+        /* Aplica as preferências antes do primeiro paint (espelha src/js/core/theme.js) */
+        (function () {
+            try {
+                var p = JSON.parse(localStorage.getItem("hd:prefs") || "{}");
+                var r = document.documentElement;
+                r.dataset.theme = p.theme || "system";
+                r.dataset.systemTheme = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+                r.dataset.motion = p.motion || "system";
+                r.dataset.density = p.density || "comfortable";
+                r.dataset.sidebar = p.sidebar || "expanded";
+            } catch (e) {}
+        })();
+    </script>
+    <link rel="stylesheet" href="/src/styles/main.css">
+    <link rel="stylesheet" href="/src/styles/pages/login.css">
+</head>
+<body class="login-body">
+    <div class="login">
+        <!-- Painel da marca (só desktop) — conteúdo decorativo/informativo -->
+        <aside class="login-hero" aria-label="Sobre o HelpDesk">
+            <div class="login-hero__mesh" aria-hidden="true">
+                <span class="login-hero__blob login-hero__blob--1"></span>
+                <span class="login-hero__blob login-hero__blob--2"></span>
+                <span class="login-hero__blob login-hero__blob--3"></span>
+            </div>
+            <div class="login-hero__grid" aria-hidden="true"></div>
+
+            <div class="login-hero__content stagger">
+                <div class="brand login-hero__brand" style="--i: 0">
+                    <span class="brand__mark" data-icone="marca"></span>
+                    <span class="brand__name">HelpDesk</span>
+                </div>
+                <p class="login-hero__title" style="--i: 1">
+                    Suporte que <span class="login-hero__accent">resolve</span>, sem ruído.
+                </p>
+                <p class="login-hero__lead" style="--i: 2">
+                    Abra chamados em segundos, acompanhe cada etapa e converse com o técnico no mesmo lugar.
+                </p>
+                <ul class="login-hero__features" style="--i: 3">
+                    <li>
+                        <span class="login-hero__feature-icon" data-icone="rapido"></span>
+                        <span><strong>Chamado em segundos</strong> Categoria, prioridade e descrição em um só formulário.</span>
+                    </li>
+                    <li>
+                        <span class="login-hero__feature-icon" data-icone="conversa"></span>
+                        <span><strong>Conversa em tempo real</strong> Mensagens com o técnico direto no chamado.</span>
+                    </li>
+                    <li>
+                        <span class="login-hero__feature-icon" data-icone="fila"></span>
+                        <span><strong>Fila organizada</strong> Técnicos priorizam e movem chamados em um quadro Kanban.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <p class="login-hero__foot">Projeto de estudo · HelpDesk</p>
+        </aside>
+
+        <main id="conteudo" class="login__main" tabindex="-1">
+            <button class="btn btn--ghost btn--icon login__tema" type="button" id="alternar-tema" aria-label="Alternar tema"></button>
+
+            <div class="login-card" id="login-card">
+                <div class="stagger login-card__inner">
+                    <div class="brand login-card__brand" style="--i: 0">
+                        <span class="brand__mark" data-icone="marca"></span>
+                        <span class="brand__name">HelpDesk</span>
+                    </div>
+
+                    <header class="login-card__header" style="--i: 1">
+                        <h1 class="login-card__title">Entrar</h1>
+                        <p class="login-card__subtitle">Acesse sua conta para abrir e acompanhar seus chamados.</p>
+                    </header>
+
+                    <form class="login-form" id="form-login" novalidate style="--i: 2">
+                        <div class="field" id="campo-email">
+                            <label class="field__label" for="email">E-mail</label>
+                            <div class="input-wrap" data-icone="email">
+                                <input class="input" type="email" id="email" name="email"
+                                    autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false"
+                                    placeholder="nome@empresa.com" required
+                                    aria-describedby="email-erro">
+                            </div>
+                            <p class="field__error" id="email-erro"></p>
+                        </div>
+
+                        <div class="field" id="campo-senha">
+                            <label class="field__label" for="senha">Senha</label>
+                            <div class="input-wrap" data-icone="senha">
+                                <input class="input login-form__senha" type="password" id="senha" name="senha"
+                                    autocomplete="current-password" placeholder="Sua senha" required
+                                    aria-describedby="senha-erro">
+                                <button class="btn btn--ghost btn--icon input-action login-form__olho" type="button"
+                                    id="mostrar-senha" aria-label="Mostrar senha" aria-pressed="false" aria-controls="senha"></button>
+                            </div>
+                            <p class="field__error" id="senha-erro"></p>
+                        </div>
+
+                        <!-- Região sempre presente para o leitor de tela anunciar o erro ao ser preenchida -->
+                        <div class="login-form__alerta" id="login-alerta" role="alert"></div>
+
+                        <button class="btn btn--primary btn--lg btn--block login-form__enviar" type="submit" id="botao-entrar">
+                            <span>Entrar</span>
+                            <span class="login-form__seta" data-icone="seta"></span>
+                        </button>
+                    </form>
+
+                    <p class="login-card__foot" style="--i: 3">
+                        Problemas para acessar? Fale com a equipe de TI.
+                    </p>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script type="module" src="/src/js/pages/login.js"></script>
+</body>
 </html>

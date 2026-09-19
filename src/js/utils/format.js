@@ -116,3 +116,8 @@ export function formatarNumeroChamado(n) {
 export function plural(n, singular, pluralForma = `${singular}s`) {
     return `${formatarNumero(n)} ${n === 1 ? singular : pluralForma}`;
 }
+
+/** Texto para comparação em buscas: minúsculas e sem acentos ("Impressão" → "impressao"). */
+export function normalizarBusca(texto) {
+    return String(texto ?? "").normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
+}

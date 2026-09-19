@@ -116,4 +116,8 @@
     .table--responsive td.cell-full::before {
         display: none;
     }
+
+    .table--responsive td > .badge {
+        align-self: flex-start;
+    }
 }

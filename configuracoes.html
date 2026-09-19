@@ -1,5 +1,211 @@
 <!doctype html>
-<html lang="pt-BR">
-<head><meta charset="UTF-8"><title>configuracoes · HelpDesk</title><link rel="stylesheet" href="/src/styles/main.css"></head>
-<body><div class="app" id="app"><main id="conteudo" class="page" tabindex="-1"><p>Em construção</p></main></div></body>
+<html lang="pt-BR" data-theme="system">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Configurações · HelpDesk</title>
+    <meta name="description" content="Perfil, aparência, movimento, atalhos e dados locais do HelpDesk.">
+    <meta name="theme-color" content="#0f0d13">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+    <script>
+        /* Aplica as preferências antes do primeiro paint (espelha src/js/core/theme.js) */
+        (function () {
+            try {
+                var p = JSON.parse(localStorage.getItem("hd:prefs") || "{}");
+                var r = document.documentElement;
+                r.dataset.theme = p.theme || "system";
+                r.dataset.systemTheme = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+                r.dataset.motion = p.motion || "system";
+                r.dataset.density = p.density || "comfortable";
+                r.dataset.sidebar = p.sidebar || "expanded";
+            } catch (e) {}
+        })();
+    </script>
+    <link rel="stylesheet" href="/src/styles/main.css">
+    <link rel="stylesheet" href="/src/styles/pages/configuracoes.css">
+</head>
+<body>
+    <div class="app" id="app">
+        <main id="conteudo" class="page" tabindex="-1">
+            <header class="page-header">
+                <div class="page-header__text">
+                    <span class="page-header__eyebrow">Conta</span>
+                    <h1>Configurações</h1>
+                    <p class="page-header__subtitle">As preferências ficam salvas neste navegador e valem na hora.</p>
+                </div>
+            </header>
+
+            <div class="cfg-layout">
+                <nav class="cfg-nav" aria-label="Seções das configurações">
+                    <a class="cfg-nav__item" href="#perfil" data-secao="perfil">Perfil</a>
+                    <a class="cfg-nav__item" href="#aparencia" data-secao="aparencia">Aparência</a>
+                    <a class="cfg-nav__item" href="#movimento" data-secao="movimento">Movimento</a>
+                    <a class="cfg-nav__item" href="#atalhos" data-secao="atalhos">Atalhos de teclado</a>
+                    <a class="cfg-nav__item" href="#dados" data-secao="dados">Dados locais</a>
+                    <a class="cfg-nav__item" href="#sobre" data-secao="sobre">Sobre</a>
+                </nav>
+
+                <div class="cfg-secoes">
+                    <!-- Perfil -->
+                    <section class="card cfg-secao" id="perfil" aria-labelledby="t-perfil">
+                        <header class="cfg-secao__header">
+                            <h2 id="t-perfil">Perfil</h2>
+                            <p class="cfg-secao__desc">Seus dados de acesso ao HelpDesk.</p>
+                        </header>
+                        <div class="cfg-perfil" id="cfg-perfil" aria-busy="true"></div>
+                        <p class="cfg-nota" id="cfg-perfil-nota">Para alterar seus dados, fale com um administrador.</p>
+                    </section>
+
+                    <!-- Aparência -->
+                    <section class="card cfg-secao" id="aparencia" aria-labelledby="t-aparencia">
+                        <header class="cfg-secao__header">
+                            <h2 id="t-aparencia">Aparência</h2>
+                            <p class="cfg-secao__desc">Tema, densidade das listas e menu lateral.</p>
+                        </header>
+
+                        <fieldset class="cfg-grupo">
+                            <legend class="cfg-grupo__titulo">Tema</legend>
+                            <div class="cfg-opcoes cfg-opcoes--3" id="cfg-tema">
+                                <label class="cfg-opcao">
+                                    <input type="radio" name="theme" value="system">
+                                    <span class="cfg-previa cfg-previa--sistema" aria-hidden="true">
+                                        <span class="cfg-previa__metade cfg-previa--claro"><span class="cfg-previa__barra"></span><span class="cfg-previa__linha"></span><span class="cfg-previa__linha cfg-previa__linha--curta"></span></span>
+                                        <span class="cfg-previa__metade cfg-previa--escuro"><span class="cfg-previa__barra"></span><span class="cfg-previa__linha"></span><span class="cfg-previa__linha cfg-previa__linha--curta"></span></span>
+                                    </span>
+                                    <span class="cfg-opcao__texto">
+                                        <span class="cfg-opcao__titulo">Sistema</span>
+                                        <span class="cfg-opcao__dica" id="cfg-tema-sistema-dica">Segue o seu dispositivo</span>
+                                    </span>
+                                </label>
+                                <label class="cfg-opcao">
+                                    <input type="radio" name="theme" value="light">
+                                    <span class="cfg-previa cfg-previa--claro" aria-hidden="true">
+                                        <span class="cfg-previa__lateral"></span>
+                                        <span class="cfg-previa__corpo"><span class="cfg-previa__barra"></span><span class="cfg-previa__linha"></span><span class="cfg-previa__linha cfg-previa__linha--curta"></span></span>
+                                    </span>
+                                    <span class="cfg-opcao__texto"><span class="cfg-opcao__titulo">Claro</span></span>
+                                </label>
+                                <label class="cfg-opcao">
+                                    <input type="radio" name="theme" value="dark">
+                                    <span class="cfg-previa cfg-previa--escuro" aria-hidden="true">
+                                        <span class="cfg-previa__lateral"></span>
+                                        <span class="cfg-previa__corpo"><span class="cfg-previa__barra"></span><span class="cfg-previa__linha"></span><span class="cfg-previa__linha cfg-previa__linha--curta"></span></span>
+                                    </span>
+                                    <span class="cfg-opcao__texto"><span class="cfg-opcao__titulo">Escuro</span></span>
+                                </label>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="cfg-grupo">
+                            <legend class="cfg-grupo__titulo">Densidade das listas</legend>
+                            <div class="cfg-opcoes cfg-opcoes--2" id="cfg-densidade">
+                                <label class="cfg-opcao">
+                                    <input type="radio" name="density" value="comfortable">
+                                    <span class="cfg-previa cfg-previa--linhas" aria-hidden="true">
+                                        <span></span><span></span><span></span>
+                                    </span>
+                                    <span class="cfg-opcao__texto">
+                                        <span class="cfg-opcao__titulo">Confortável</span>
+                                        <span class="cfg-opcao__dica">Mais espaço entre as linhas</span>
+                                    </span>
+                                </label>
+                                <label class="cfg-opcao">
+                                    <input type="radio" name="density" value="compact">
+                                    <span class="cfg-previa cfg-previa--linhas cfg-previa--compacta" aria-hidden="true">
+                                        <span></span><span></span><span></span><span></span><span></span>
+                                    </span>
+                                    <span class="cfg-opcao__texto">
+                                        <span class="cfg-opcao__titulo">Compacta</span>
+                                        <span class="cfg-opcao__dica">Mais chamados na tela</span>
+                                    </span>
+                                </label>
+                            </div>
+                        </fieldset>
+
+                        <div class="cfg-linha">
+                            <div class="cfg-linha__texto">
+                                <span class="cfg-grupo__titulo" id="cfg-sidebar-rotulo">Menu lateral recolhido</span>
+                                <span class="cfg-opcao__dica" id="cfg-sidebar-dica">Mostra só os ícones do menu em telas largas.</span>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" role="switch" id="cfg-sidebar" aria-labelledby="cfg-sidebar-rotulo" aria-describedby="cfg-sidebar-dica">
+                            </label>
+                        </div>
+                    </section>
+
+                    <!-- Movimento -->
+                    <section class="card cfg-secao" id="movimento" aria-labelledby="t-movimento">
+                        <header class="cfg-secao__header">
+                            <h2 id="t-movimento">Movimento</h2>
+                            <p class="cfg-secao__desc">Controle as animações da interface. "Reduzir" também vale se o sistema pedir o contrário.</p>
+                        </header>
+
+                        <fieldset class="cfg-grupo">
+                            <legend class="sr-only">Animações</legend>
+                            <div class="segmented cfg-segmented" id="cfg-movimento">
+                                <label class="segmented__option"><input type="radio" name="motion" value="system"> Seguir o sistema</label>
+                                <label class="segmented__option"><input type="radio" name="motion" value="reduce"> Reduzir</label>
+                                <label class="segmented__option"><input type="radio" name="motion" value="full"> Completo</label>
+                            </div>
+                        </fieldset>
+
+                        <div class="cfg-demo" id="cfg-demo">
+                            <div class="cfg-demo__palco" aria-hidden="true">
+                                <span class="cfg-demo__card"><span></span><span></span></span>
+                                <span class="cfg-demo__card"><span></span><span></span></span>
+                                <span class="cfg-demo__card"><span></span><span></span></span>
+                            </div>
+                            <p class="cfg-demo__texto" id="cfg-demo-texto" aria-live="polite"></p>
+                        </div>
+                    </section>
+
+                    <!-- Atalhos -->
+                    <section class="card cfg-secao" id="atalhos" aria-labelledby="t-atalhos">
+                        <header class="cfg-secao__header">
+                            <h2 id="t-atalhos">Atalhos de teclado</h2>
+                            <p class="cfg-secao__desc">Funcionam em qualquer página do HelpDesk.</p>
+                        </header>
+                        <div class="table-wrap">
+                            <table class="table cfg-atalhos">
+                                <caption class="sr-only">Atalhos de teclado</caption>
+                                <thead>
+                                    <tr><th scope="col">Ação</th><th scope="col">Atalho</th></tr>
+                                </thead>
+                                <tbody id="cfg-atalhos"></tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- Dados locais -->
+                    <section class="card cfg-secao" id="dados" aria-labelledby="t-dados">
+                        <header class="cfg-secao__header">
+                            <h2 id="t-dados">Dados locais</h2>
+                            <p class="cfg-secao__desc">Rascunhos de chamados e preferências ficam guardados só neste navegador.</p>
+                        </header>
+                        <div class="cfg-linha">
+                            <div class="cfg-linha__texto">
+                                <span class="cfg-grupo__titulo">Armazenado aqui</span>
+                                <span class="cfg-opcao__dica" id="cfg-dados-resumo">—</span>
+                            </div>
+                            <button class="btn btn--danger" type="button" id="cfg-limpar">Limpar rascunhos e preferências</button>
+                        </div>
+                    </section>
+
+                    <!-- Sobre -->
+                    <section class="card cfg-secao" id="sobre" aria-labelledby="t-sobre">
+                        <header class="cfg-secao__header">
+                            <h2 id="t-sobre">Sobre</h2>
+                            <p class="cfg-secao__desc">HelpDesk — projeto de estudo de uma central de chamados.</p>
+                        </header>
+                        <dl class="cfg-sobre" id="cfg-sobre"></dl>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script type="module" src="/src/js/pages/configuracoes.js"></script>
+</body>
 </html>

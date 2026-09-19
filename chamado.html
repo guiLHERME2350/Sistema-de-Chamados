@@ -1,5 +1,119 @@
 <!doctype html>
-<html lang="pt-BR">
-<head><meta charset="UTF-8"><title>chamado · HelpDesk</title><link rel="stylesheet" href="/src/styles/main.css"></head>
-<body><div class="app" id="app"><main id="conteudo" class="page" tabindex="-1"><p>Em construção</p></main></div></body>
+<html lang="pt-BR" data-theme="system">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Chamado · HelpDesk</title>
+    <meta name="description" content="Detalhes e conversa de um chamado do HelpDesk.">
+    <meta name="theme-color" content="#0f0d13">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+    <script>
+        /* Aplica as preferências antes do primeiro paint (espelha src/js/core/theme.js) */
+        (function () {
+            try {
+                var p = JSON.parse(localStorage.getItem("hd:prefs") || "{}");
+                var r = document.documentElement;
+                r.dataset.theme = p.theme || "system";
+                r.dataset.systemTheme = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+                r.dataset.motion = p.motion || "system";
+                r.dataset.density = p.density || "comfortable";
+                r.dataset.sidebar = p.sidebar || "expanded";
+            } catch (e) {}
+        })();
+    </script>
+    <link rel="stylesheet" href="/src/styles/main.css">
+    <link rel="stylesheet" href="/src/styles/pages/chamado.css">
+</head>
+<body>
+    <div class="app" id="app">
+        <main id="conteudo" class="page page--chamado" tabindex="-1">
+            <header class="chamado-header" id="cabecalho">
+                <a class="back-link" id="voltar" href="chamados.html">Voltar para chamados</a>
+                <div class="chamado-header__linha">
+                    <div class="chamado-header__texto">
+                        <p class="chamado-header__eyebrow">Chamado <span id="numero-chamado" class="num">#—</span></p>
+                        <script>
+                            /* Número e view-transition-name no 1º render (transição compartilhada com a lista) */
+                            (function () {
+                                try {
+                                    var p = new URLSearchParams(location.search);
+                                    var id = p.get("id");
+                                    var n = p.get("n");
+                                    var el = document.getElementById("numero-chamado");
+                                    if (id) el.style.viewTransitionName = "chamado-" + id.replace(/[^A-Za-z0-9_-]/g, "");
+                                    if (n && /^\d+$/.test(n)) el.textContent = "#" + n.padStart(4, "0");
+                                } catch (e) {}
+                            })();
+                        </script>
+                        <h1 class="chamado-header__titulo" id="titulo-chamado">
+                            <span class="skeleton" style="--w: min(420px, 80%); --h: 32px" aria-hidden="true"></span>
+                            <span class="sr-only">Carregando chamado…</span>
+                        </h1>
+                        <div class="cluster chamado-header__badges" id="badges-chamado">
+                            <span class="skeleton" style="--w: 84px; --h: 24px; --r: 999px" aria-hidden="true"></span>
+                            <span class="skeleton" style="--w: 64px; --h: 24px; --r: 999px" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                    <div class="chamado-header__acoes">
+                        <button class="btn btn--secondary btn--sm" type="button" id="btn-copiar" disabled>Copiar link</button>
+                    </div>
+                </div>
+            </header>
+
+            <div class="chamado-layout">
+                <aside class="painel" id="painel" aria-label="Detalhes do chamado">
+                    <details class="detalhes" id="detalhes">
+                        <summary class="detalhes__summary">
+                            <span class="detalhes__summary-texto">
+                                <strong>Detalhes do chamado</strong>
+                                <span class="detalhes__resumo" id="detalhes-resumo">Carregando…</span>
+                            </span>
+                            <span class="detalhes__chevron" id="detalhes-chevron" aria-hidden="true"></span>
+                        </summary>
+                        <div class="detalhes__corpo" id="detalhes-corpo" aria-busy="true">
+                            <h2 class="detalhes__titulo">Detalhes</h2>
+                            <div class="stack painel__skeleton" aria-hidden="true">
+                                <div class="cluster"><span class="skeleton skeleton--circle" style="--w: 36px; --h: 36px"></span><span class="skeleton" style="--w: 60%"></span></div>
+                                <div class="cluster"><span class="skeleton skeleton--circle" style="--w: 36px; --h: 36px"></span><span class="skeleton" style="--w: 50%"></span></div>
+                                <span class="skeleton" style="--w: 45%"></span>
+                                <span class="skeleton" style="--w: 70%"></span>
+                                <span class="skeleton" style="--w: 55%"></span>
+                                <span class="skeleton" style="--w: 90%; --h: 72px"></span>
+                            </div>
+                        </div>
+                    </details>
+                    <div class="painel__acoes" id="acoes"></div>
+                </aside>
+
+                <section class="conversa" id="conversa" aria-labelledby="conversa-titulo">
+                    <h2 class="sr-only" id="conversa-titulo">Conversa</h2>
+                    <div class="conversa__lista" id="lista-mensagens" role="region" aria-busy="true" tabindex="0" aria-label="Mensagens do chamado">
+                        <div class="conversa__skeleton" aria-hidden="true">
+                            <div class="sk-bolha"><span class="skeleton skeleton--circle" style="--w: 32px; --h: 32px"></span><span class="skeleton" style="--w: 62%; --h: 64px; --r: 16px"></span></div>
+                            <div class="sk-bolha sk-bolha--minha"><span class="skeleton" style="--w: 44%; --h: 40px; --r: 16px"></span></div>
+                            <div class="sk-bolha"><span class="skeleton skeleton--circle" style="--w: 32px; --h: 32px"></span><span class="skeleton" style="--w: 52%; --h: 48px; --r: 16px"></span></div>
+                            <div class="sk-bolha sk-bolha--minha"><span class="skeleton" style="--w: 36%; --h: 40px; --r: 16px"></span></div>
+                        </div>
+                    </div>
+                    <button class="pilula-novas" id="pilula-novas" type="button" hidden>Novas mensagens</button>
+                    <div class="sr-only" aria-live="polite" id="anuncio-mensagens"></div>
+
+                    <form class="composer" id="composer" novalidate>
+                        <p class="composer__aviso" id="composer-aviso" hidden>Este chamado foi resolvido. Mensagens novas continuam visíveis para o técnico.</p>
+                        <div class="composer__linha">
+                            <label class="sr-only" for="campo-mensagem">Mensagem</label>
+                            <textarea class="textarea composer__campo" id="campo-mensagem" rows="1" placeholder="Escreva uma mensagem…" aria-describedby="composer-dica" disabled></textarea>
+                            <button class="btn btn--primary btn--icon composer__enviar" id="btn-enviar" type="submit" aria-label="Enviar mensagem" disabled></button>
+                        </div>
+                        <p class="composer__dica" id="composer-dica"><kbd>Enter</kbd> envia · <kbd>Shift</kbd> + <kbd>Enter</kbd> quebra linha</p>
+                    </form>
+                </section>
+            </div>
+        </main>
+    </div>
+    <script type="module" src="/src/js/pages/chamado.js"></script>
+</body>
 </html>

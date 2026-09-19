@@ -1,5 +1,58 @@
 <!doctype html>
-<html lang="pt-BR">
-<head><meta charset="UTF-8"><title>relatorios · HelpDesk</title><link rel="stylesheet" href="/src/styles/main.css"></head>
-<body><div class="app" id="app"><main id="conteudo" class="page" tabindex="-1"><p>Em construção</p></main></div></body>
+<html lang="pt-BR" data-theme="system">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Relatórios · HelpDesk</title>
+    <meta name="description" content="Indicadores e gráficos dos chamados do HelpDesk por período.">
+    <meta name="theme-color" content="#0f0d13">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+    <script>
+        /* Aplica as preferências antes do primeiro paint (espelha src/js/core/theme.js) */
+        (function () {
+            try {
+                var p = JSON.parse(localStorage.getItem("hd:prefs") || "{}");
+                var r = document.documentElement;
+                r.dataset.theme = p.theme || "system";
+                r.dataset.systemTheme = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+                r.dataset.motion = p.motion || "system";
+                r.dataset.density = p.density || "comfortable";
+                r.dataset.sidebar = p.sidebar || "expanded";
+            } catch (e) {}
+        })();
+    </script>
+    <link rel="stylesheet" href="/src/styles/main.css">
+    <link rel="stylesheet" href="/src/styles/pages/relatorios.css">
+</head>
+<body>
+    <div class="app" id="app">
+        <main id="conteudo" class="page" tabindex="-1">
+            <header class="page-header">
+                <div class="page-header__text">
+                    <span class="page-header__eyebrow">Administração</span>
+                    <h1>Relatórios</h1>
+                    <p class="page-header__subtitle" id="rel-subtitulo">Indicadores dos chamados no período selecionado.</p>
+                </div>
+                <div class="page-header__actions rel-acoes">
+                    <fieldset class="segmented rel-periodo" id="rel-periodo" role="radiogroup" aria-label="Período">
+                        <label class="segmented__option"><input type="radio" name="periodo" value="7"> 7 dias</label>
+                        <label class="segmented__option"><input type="radio" name="periodo" value="30"> 30 dias</label>
+                        <label class="segmented__option"><input type="radio" name="periodo" value="90"> 90 dias</label>
+                        <label class="segmented__option"><input type="radio" name="periodo" value="tudo"> Tudo</label>
+                    </fieldset>
+                    <button class="btn btn--secondary" type="button" id="rel-exportar" disabled>Exportar CSV</button>
+                </div>
+            </header>
+
+            <p class="sr-only" id="rel-anuncio" aria-live="polite"></p>
+
+            <section class="rel-kpis" id="rel-kpis" aria-label="Indicadores"></section>
+            <div class="rel-corpo" id="rel-corpo"></div>
+        </main>
+    </div>
+    <script type="module" src="/src/js/pages/relatorios.js"></script>
+</body>
 </html>

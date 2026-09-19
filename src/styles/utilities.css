@@ -44,3 +44,14 @@
 .text-xs {
     font-size: var(--fs-xs);
 }
+
+/* Tons semânticos. Ficam na camada utilities para vencer o --tone padrão
+   que cada componente define (badge, diálogo, paleta...). */
+[data-tone="info"] { --tone: var(--info); }
+[data-tone="warning"] { --tone: var(--warning); }
+[data-tone="success"] { --tone: var(--success); }
+[data-tone="danger"],
+[data-tone="error"] { --tone: var(--danger); }
+[data-tone="orange"] { --tone: var(--orange); }
+[data-tone="brand"] { --tone: var(--brand); }
+[data-tone="neutral"] { --tone: var(--text-muted); }

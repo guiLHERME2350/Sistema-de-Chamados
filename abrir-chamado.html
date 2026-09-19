@@ -1,5 +1,131 @@
 <!doctype html>
-<html lang="pt-BR">
-<head><meta charset="UTF-8"><title>abrir-chamado · HelpDesk</title><link rel="stylesheet" href="/src/styles/main.css"></head>
-<body><div class="app" id="app"><main id="conteudo" class="page" tabindex="-1"><p>Em construção</p></main></div></body>
+<html lang="pt-BR" data-theme="system">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Abrir chamado · HelpDesk</title>
+    <meta name="description" content="Descreva o problema, escolha a categoria e a prioridade e acompanhe o atendimento.">
+    <meta name="theme-color" content="#0f0d13">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+    <script>
+        /* Aplica as preferências antes do primeiro paint (espelha src/js/core/theme.js) */
+        (function () {
+            try {
+                var p = JSON.parse(localStorage.getItem("hd:prefs") || "{}");
+                var r = document.documentElement;
+                r.dataset.theme = p.theme || "system";
+                r.dataset.systemTheme = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+                r.dataset.motion = p.motion || "system";
+                r.dataset.density = p.density || "comfortable";
+                r.dataset.sidebar = p.sidebar || "expanded";
+            } catch (e) {}
+        })();
+    </script>
+    <link rel="stylesheet" href="/src/styles/main.css">
+    <link rel="stylesheet" href="/src/styles/pages/abrir-chamado.css">
+</head>
+<body>
+    <div class="app" id="app">
+        <main id="conteudo" class="page" tabindex="-1">
+            <header class="page-header">
+                <div class="page-header__text">
+                    <span class="page-header__eyebrow">Suporte</span>
+                    <h1>Abrir chamado</h1>
+                    <p class="page-header__subtitle">Conte o que aconteceu. Quanto mais claro o relato, mais rápido a equipe técnica resolve.</p>
+                </div>
+            </header>
+
+            <div class="novo" id="novo">
+                <form class="novo__form" id="form-chamado" novalidate aria-describedby="form-obrigatorios">
+                    <p class="novo__obrigatorios muted" id="form-obrigatorios">Todos os campos são obrigatórios.</p>
+
+                    <!-- Dicas no mobile (no desktop ficam no painel lateral) -->
+                    <details class="novo__dicas-mobile card">
+                        <summary>Como escrever um bom chamado</summary>
+                        <ul class="novo__dicas" data-dicas></ul>
+                    </details>
+
+                    <div class="sr-only" id="resumo-erros" role="alert"></div>
+
+                    <section class="card novo__secao" aria-labelledby="secao-1">
+                        <header class="novo__secao-header">
+                            <span class="novo__passo" aria-hidden="true">1</span>
+                            <div>
+                                <h2 class="novo__secao-titulo" id="secao-1">O que aconteceu?</h2>
+                                <p class="novo__secao-texto">Um resumo curto e os detalhes do problema.</p>
+                            </div>
+                        </header>
+
+                        <div class="field" data-campo="titulo">
+                            <div class="field__row">
+                                <label class="field__label" for="titulo">Título</label>
+                                <span class="field__counter" id="titulo-contador">0/80</span>
+                            </div>
+                            <input class="input" id="titulo" name="titulo" type="text" maxlength="80" autocomplete="off"
+                                placeholder="Ex.: Impressora do 2º andar não imprime" required
+                                aria-describedby="titulo-dica titulo-contador">
+                            <p class="field__hint" id="titulo-dica">Resuma o problema em uma frase, até 80 caracteres.</p>
+                            <p class="field__error" id="titulo-erro"></p>
+                        </div>
+
+                        <div class="field" data-campo="descricao">
+                            <label class="field__label" for="descricao">Descrição</label>
+                            <textarea class="textarea" id="descricao" name="descricao" rows="5" required
+                                placeholder="O que você estava fazendo, o que esperava que acontecesse e o que aconteceu de fato."
+                                aria-describedby="descricao-dica"></textarea>
+                            <p class="field__hint" id="descricao-dica">Mínimo de 10 caracteres. Inclua mensagens de erro e o que você já tentou.</p>
+                            <p class="field__error" id="descricao-erro"></p>
+                        </div>
+                    </section>
+
+                    <section class="card novo__secao" aria-labelledby="secao-2">
+                        <header class="novo__secao-header">
+                            <span class="novo__passo" aria-hidden="true">2</span>
+                            <div>
+                                <h2 class="novo__secao-titulo" id="secao-2">Classificação</h2>
+                                <p class="novo__secao-texto">Ajuda a encaminhar para a pessoa certa.</p>
+                            </div>
+                        </header>
+
+                        <fieldset class="field" data-campo="categoria" aria-describedby="categoria-erro">
+                            <legend class="field__label">Categoria</legend>
+                            <div class="chip-group" id="categorias"></div>
+                            <p class="field__error" id="categoria-erro"></p>
+                        </fieldset>
+
+                        <fieldset class="field" data-campo="prioridade" aria-describedby="prioridade-dica">
+                            <legend class="field__label">Prioridade</legend>
+                            <div class="segmented" id="prioridades"></div>
+                            <p class="novo__dica-prioridade" id="prioridade-dica" aria-live="polite"></p>
+                        </fieldset>
+                    </section>
+
+                    <div class="novo__acoes">
+                        <p class="novo__rascunho" id="rascunho-status" hidden></p>
+                        <div class="novo__enviar">
+                            <span class="novo__atalho muted" aria-hidden="true"><kbd data-mod>Ctrl</kbd> + <kbd>Enter</kbd> para enviar</span>
+                            <button class="btn btn--primary btn--lg" type="submit" id="btn-enviar">Abrir chamado</button>
+                        </div>
+                    </div>
+                </form>
+
+                <aside class="novo__lateral" aria-label="Prévia e dicas">
+                    <section class="novo__painel" aria-labelledby="previa-titulo">
+                        <h2 class="novo__painel-titulo" id="previa-titulo">Prévia</h2>
+                        <p class="novo__painel-texto muted">É assim que o chamado aparece para a equipe.</p>
+                        <div id="previa"></div>
+                    </section>
+                    <section class="novo__painel card" aria-labelledby="dicas-titulo">
+                        <h2 class="novo__painel-titulo" id="dicas-titulo">Como escrever um bom chamado</h2>
+                        <ul class="novo__dicas" data-dicas></ul>
+                    </section>
+                </aside>
+            </div>
+        </main>
+    </div>
+    <script type="module" src="/src/js/pages/abrir-chamado.js"></script>
+</body>
 </html>

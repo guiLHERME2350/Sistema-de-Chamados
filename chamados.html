@@ -1,5 +1,65 @@
 <!doctype html>
-<html lang="pt-BR">
-<head><meta charset="UTF-8"><title>chamados · HelpDesk</title><link rel="stylesheet" href="/src/styles/main.css"></head>
-<body><div class="app" id="app"><main id="conteudo" class="page" tabindex="-1"><p>Em construção</p></main></div></body>
+<html lang="pt-BR" data-theme="system">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Chamados · HelpDesk</title>
+    <meta name="description" content="Lista de chamados em tempo real, com busca, filtros por status, prioridade e categoria, fila e histórico.">
+    <meta name="theme-color" content="#0f0d13">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+    <script>
+        /* Aplica as preferências antes do primeiro paint (espelha src/js/core/theme.js) */
+        (function () {
+            try {
+                var p = JSON.parse(localStorage.getItem("hd:prefs") || "{}");
+                var r = document.documentElement;
+                r.dataset.theme = p.theme || "system";
+                r.dataset.systemTheme = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+                r.dataset.motion = p.motion || "system";
+                r.dataset.density = p.density || "comfortable";
+                r.dataset.sidebar = p.sidebar || "expanded";
+            } catch (e) {}
+        })();
+    </script>
+    <link rel="stylesheet" href="/src/styles/main.css">
+    <link rel="stylesheet" href="/src/styles/pages/chamados.css">
+</head>
+<body>
+    <div class="app" id="app">
+        <main id="conteudo" class="page lista-chamados" tabindex="-1">
+            <header class="page-header">
+                <div class="page-header__text">
+                    <span class="page-header__eyebrow">Atendimento</span>
+                    <h1 id="lc-titulo">Chamados</h1>
+                    <p class="page-header__subtitle" id="lc-subtitulo">Acompanhe o andamento das solicitações.</p>
+                </div>
+                <div class="page-header__actions" id="lc-acoes"></div>
+            </header>
+
+            <div class="lc-topo">
+                <div class="tabs" role="tablist" aria-label="Situação dos chamados" id="lc-abas">
+                    <button class="tabs__tab" type="button" role="tab" id="lc-aba-fila" data-value="fila" aria-selected="true" aria-controls="lc-painel">
+                        Fila <span class="count" id="lc-count-fila">–</span>
+                    </button>
+                    <button class="tabs__tab" type="button" role="tab" id="lc-aba-historico" data-value="historico" aria-selected="false" aria-controls="lc-painel">
+                        Histórico <span class="count" id="lc-count-historico">–</span>
+                    </button>
+                </div>
+                <p class="lc-resumo" id="lc-resumo"></p>
+            </div>
+
+            <form class="lc-toolbar" id="lc-toolbar" role="search" aria-label="Filtrar chamados"></form>
+
+            <p class="sr-only" id="lc-anuncio" aria-live="polite" aria-atomic="true"></p>
+
+            <section class="lc-painel" id="lc-painel" role="tabpanel" aria-labelledby="lc-aba-fila"></section>
+
+            <div class="lc-rodape" id="lc-rodape" hidden></div>
+        </main>
+    </div>
+    <script type="module" src="/src/js/pages/chamados.js"></script>
+</body>
 </html>

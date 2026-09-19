@@ -1,0 +1,279 @@
+@layer pages {
+    /* ---------- Topo: abas + resumo ---------- */
+    .lc-topo {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-3);
+        margin-bottom: var(--space-4);
+    }
+
+    .lc-resumo {
+        color: var(--text-muted);
+        font-size: var(--fs-sm);
+        min-height: 1lh;
+    }
+
+    .lc-resumo strong {
+        color: var(--text);
+        font-weight: var(--fw-semibold);
+    }
+
+    /* ---------- Barra de ferramentas ---------- */
+    .lc-toolbar {
+        display: grid;
+        gap: var(--space-3);
+        margin-bottom: var(--space-4);
+    }
+
+    .lc-filtros {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--space-2);
+    }
+
+    .lc-filtro[hidden] {
+        display: none;
+    }
+
+    .lc-filtros .select {
+        font-size: var(--fs-sm);
+    }
+
+    .lc-limpar {
+        grid-column: 1 / -1;
+        justify-self: start;
+        min-height: var(--tap);
+        animation: fade-in var(--dur-base) var(--ease-out);
+    }
+
+    .lc-limpar[hidden] {
+        display: none;
+    }
+
+    /* iOS: evita zoom ao focar (fonte ≥ 16px) */
+    @media (max-width: 639px) {
+        .lc-filtros .select {
+            font-size: var(--fs-md);
+        }
+    }
+
+    @media (min-width: 640px) {
+        .lc-filtros {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .lc-filtro {
+            flex: 1 1 160px;
+            max-width: 220px;
+        }
+
+        .lc-limpar {
+            grid-column: auto;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .lc-toolbar {
+            grid-template-columns: minmax(240px, 1fr) auto;
+            align-items: center;
+        }
+
+        .lc-filtros {
+            flex-wrap: nowrap;
+        }
+
+        .lc-filtro {
+            flex: 0 1 180px;
+        }
+    }
+
+    /* ---------- Painel / tabela ---------- */
+    .lc-painel {
+        min-height: 240px;
+    }
+
+    .lc-skeleton,
+    .lc-painel > .empty-state {
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        background: var(--surface-1);
+    }
+
+    .lc-skeleton .skeleton-row:last-child {
+        border-bottom: 0;
+    }
+
+    .lc-numero {
+        display: inline-block;
+        font-weight: var(--fw-semibold);
+        color: var(--brand);
+    }
+
+    .row-link:hover .lc-numero {
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+
+    .lc-titulo {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-1);
+        min-width: 0;
+    }
+
+    .lc-titulo__texto {
+        font-weight: var(--fw-semibold);
+        color: var(--text);
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        overflow-wrap: anywhere;
+    }
+
+    .lc-titulo__meta,
+    .lc-col--tecnico {
+        color: var(--text-muted);
+        font-size: var(--fs-xs);
+    }
+
+    .lc-pessoa {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-2);
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .lc-tempo {
+        color: var(--text-muted);
+        white-space: nowrap;
+    }
+
+    /* Linhas trazidas por "Carregar mais" */
+    .lc-tabela tbody tr.lc-entrando {
+        animation: fade-in-up var(--dur-slow) var(--ease-out) backwards;
+        animation-delay: calc(var(--i, 0) * var(--stagger));
+    }
+
+    /* Desktop: a tabela fica num cartão e o cabeçalho gruda sob a topbar.
+       overflow visível é necessário para o sticky funcionar em relação à página. */
+    @media (min-width: 768px) {
+        .lc-wrap {
+            overflow: visible;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            background: var(--surface-1);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .lc-tabela th {
+            top: var(--topbar-h);
+            z-index: 2;
+        }
+
+        .lc-tabela thead th:first-child {
+            border-top-left-radius: var(--radius-lg);
+        }
+
+        .lc-tabela thead th:last-child {
+            border-top-right-radius: var(--radius-lg);
+        }
+
+        .lc-tabela tbody tr:last-child td:first-child {
+            border-bottom-left-radius: var(--radius-lg);
+        }
+
+        .lc-tabela tbody tr:last-child td:last-child {
+            border-bottom-right-radius: var(--radius-lg);
+        }
+
+        .lc-tabela .lc-col--numero {
+            width: 1%;
+            white-space: nowrap;
+        }
+
+        .lc-tabela .lc-col--titulo {
+            min-width: 220px;
+        }
+
+        .lc-tabela .lc-col--abertura,
+        .lc-tabela .lc-col--resolucao,
+        .lc-tabela .lc-col--status,
+        .lc-tabela .lc-col--prioridade,
+        .lc-tabela .lc-col--categoria {
+            white-space: nowrap;
+        }
+
+        .lc-tabela .lc-col--tecnico {
+            max-width: 180px;
+        }
+    }
+
+    /* Colunas menos importantes somem em telas médias */
+    @media (min-width: 768px) and (max-width: 1199px) {
+        .lc-tabela .lc-col--categoria {
+            display: none;
+        }
+    }
+
+    /* Mobile: cards — nº e status na primeira linha, título em largura total */
+    @media (max-width: 767px) {
+        .lc-tabela tbody {
+            padding: 0;
+        }
+
+        .lc-tabela td {
+            order: 3;
+        }
+
+        .lc-tabela td.lc-col--numero {
+            order: 0;
+        }
+
+        .lc-tabela td.lc-col--status {
+            order: 1;
+            align-items: flex-end;
+        }
+
+        .lc-tabela td.lc-col--titulo {
+            order: 2;
+        }
+
+        .lc-tabela td.lc-col--numero::before,
+        .lc-tabela td.lc-col--status::before {
+            display: none;
+        }
+
+        .lc-tabela td .badge {
+            align-self: flex-start;
+        }
+
+        .lc-tabela td.lc-col--status .badge {
+            align-self: flex-end;
+        }
+
+        .lc-tabela tbody tr:has(.row-link:focus-visible) {
+            box-shadow: var(--focus-ring);
+        }
+    }
+
+    /* ---------- Rodapé (carregar mais) ---------- */
+    .lc-rodape {
+        display: flex;
+        justify-content: center;
+        margin-top: var(--space-5);
+    }
+
+    .lc-rodape[hidden] {
+        display: none;
+    }
+
+    .lc-rodape .muted {
+        font-weight: var(--fw-regular);
+    }
+}
