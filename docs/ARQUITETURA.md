@@ -2,13 +2,7 @@
 
 Guia de convenções do projeto. Leia antes de criar ou alterar uma página.
 
-## Rodando
-
-```bash
-npm install
-npm run dev      # http://localhost:5173 com hot reload
-npm run build    # gera dist/ (funciona dentro do XAMPP: localhost/helpdesk/dist/)
-```
+Para instalar e rodar o projeto, veja o [README](../README.md).
 
 ## Estrutura
 

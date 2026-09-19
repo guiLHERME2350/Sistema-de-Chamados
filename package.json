@@ -1,15 +1,12 @@
 {
   "name": "helpdesk",
   "version": "1.0.0",
-  "description": "",
-  "main": "abrirchamado.js",
+  "description": "Sistema de chamados (help desk) — projeto de estudo com Vite e Firebase",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
