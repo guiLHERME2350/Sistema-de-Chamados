@@ -65,7 +65,6 @@ function sincronizarControles() {
     botaoTema.title = botaoTema.getAttribute("aria-label");
     seletorMovimento.value = prefs.motion;
     seletorDensidade.value = prefs.density;
-    $('meta[name="theme-color"]')?.setAttribute("content", token("--bg"));
     atualizarCores();
 }
 

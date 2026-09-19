@@ -7,8 +7,9 @@
     height: var(--size);
     flex-shrink: 0;
     border-radius: 50%;
-    background: oklch(0.55 0.14 var(--hue, 300));
-    color: #fff;
+    /* L 0.5: iniciais brancas com contraste ≥ 4.5:1 em qualquer matiz */
+    background: oklch(0.5 0.14 var(--hue, 300));
+    color: var(--text-on-brand);
     font-size: calc(var(--size) * 0.38);
     font-weight: var(--fw-semibold);
     letter-spacing: 0.02em;

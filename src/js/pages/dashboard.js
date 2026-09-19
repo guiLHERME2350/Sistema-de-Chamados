@@ -510,20 +510,27 @@ desenharCabecalhoFixo();
 conectar();
 
 // Tempo relativo ("há 5 minutos") envelhece sem recarregar
-const relogio = setInterval(() => {
+function atualizarTempos() {
     for (const t of document.querySelectorAll("[data-tempo]")) {
         const data = t.getAttribute("datetime");
         if (data) t.textContent = t.dataset.prefixo + tempoRelativo(new Date(data));
     }
-}, 60_000);
+}
+let relogio = setInterval(atualizarTempos, 60_000);
 
 window.addEventListener("pagehide", () => {
     pararDeObservar?.();
     pararDeObservar = null;
     clearInterval(relogio);
+    relogio = 0;
 });
 
-// Voltando do bfcache: o observador foi encerrado no pagehide
+// Voltando do bfcache: o observador e o relógio foram encerrados no pagehide
 window.addEventListener("pageshow", (e) => {
-    if (e.persisted && !pararDeObservar && el.erro.hidden) conectar();
+    if (!e.persisted) return;
+    if (!relogio) {
+        atualizarTempos();
+        relogio = setInterval(atualizarTempos, 60_000);
+    }
+    if (!pararDeObservar && el.erro.hidden) conectar();
 });

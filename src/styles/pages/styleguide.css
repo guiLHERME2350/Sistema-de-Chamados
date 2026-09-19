@@ -1,7 +1,7 @@
 @layer pages {
     :root {
         --sg-topbar-h: 64px;
-        --sg-nav-h: 52px;
+        --sg-nav-h: 61px; /* 44px (alvo de toque) + padding + borda */
     }
 
     html {
@@ -57,12 +57,14 @@
         display: flex;
         align-items: flex-end;
         gap: var(--space-2);
+        min-width: 0;
     }
 
     .sg-control {
         display: flex;
         flex-direction: column;
         gap: 2px;
+        min-width: 0;
     }
 
     .sg-control__label {
@@ -91,8 +93,9 @@
         }
 
         .sg-control__select {
-            width: auto;
-            max-width: none;
+            width: 100%;
+            max-width: 100%;
+            text-overflow: ellipsis;
             padding-inline: var(--space-2) var(--space-6);
             background-position: right var(--space-2) center;
             min-height: var(--tap);
@@ -100,6 +103,10 @@
 
         .sg-topbar .brand__name {
             display: none;
+        }
+
+        .sg-topbar__controls .btn--icon {
+            flex-shrink: 0;
         }
     }
 
@@ -138,7 +145,7 @@
     .sg-nav__link {
         display: flex;
         align-items: center;
-        min-height: 36px;
+        min-height: var(--tap);
         padding: 0 var(--space-3);
         border-radius: var(--radius-full);
         color: var(--text-muted);

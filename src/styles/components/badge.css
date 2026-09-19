@@ -9,11 +9,18 @@
     padding: 0 var(--space-2);
     border-radius: var(--radius-full);
     background: color-mix(in oklch, var(--tone) 15%, transparent);
-    color: var(--tone);
+    /* Levemente clareado: --brand puro sobre o próprio fundo suave ficava em 3.9:1 no escuro */
+    color: color-mix(in oklch, var(--tone) 85%, white);
     font-size: var(--fs-xs);
     font-weight: var(--fw-semibold);
     white-space: nowrap;
     transition: background-color var(--dur-slow) var(--ease-out), color var(--dur-slow) var(--ease-out);
+}
+
+/* Tema claro: o tom cheio sobre o próprio fundo suave fica < 4.5:1; escurece só o texto */
+:root[data-theme="light"] .badge,
+:root[data-theme="system"][data-system-theme="light"] .badge {
+    color: color-mix(in oklch, var(--tone) 72%, black);
 }
 
 .badge__dot {

@@ -55,10 +55,10 @@
 }
 
 .btn--primary {
-    --btn-bg: var(--brand);
+    --btn-bg: var(--brand-solid);
     --btn-fg: var(--text-on-brand);
     --btn-border: transparent;
-    --btn-bg-hover: var(--brand-hover);
+    --btn-bg-hover: var(--brand-solid-hover);
 }
 
 .btn--primary:hover:not(:disabled) {
@@ -94,6 +94,18 @@
     --btn-bg-hover: color-mix(in oklch, var(--success) 85%, white);
 }
 
+:root[data-theme="light"] .btn--danger,
+:root[data-theme="system"][data-system-theme="light"] .btn--danger {
+    --btn-fg: color-mix(in oklch, var(--danger) 78%, black);
+}
+
+/* No claro o verde é escuro: texto escuro ficaria ilegível (≈2:1) */
+:root[data-theme="light"] .btn--success,
+:root[data-theme="system"][data-system-theme="light"] .btn--success {
+    --btn-fg: var(--text-on-brand);
+    --btn-bg-hover: color-mix(in oklch, var(--success) 85%, black);
+}
+
 .btn--sm {
     min-height: 34px;
     padding: 0 var(--space-3);
@@ -117,6 +129,17 @@
 
 .btn--icon.btn--sm {
     width: 34px;
+}
+
+/* Em telas de toque o tamanho pequeno ainda respeita o alvo mínimo de 44px */
+@media (pointer: coarse) {
+    .btn--sm {
+        min-height: var(--tap);
+    }
+
+    .btn--icon.btn--sm {
+        width: var(--tap);
+    }
 }
 
 /* Estado de carregamento: esconde o conteúdo e mostra um spinner */

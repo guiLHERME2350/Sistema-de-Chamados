@@ -93,10 +93,11 @@ const perfil = await iniciarPagina({ pagina: "fila", papeis: ["tecnico", "admin"
 4. **Rótulos e cores de domínio vêm de `constants.js`** (`STATUS`, `PRIORIDADES`, `CATEGORIAS`, `PAPEIS`). Badges prontos em `components/badges.js`.
 5. **Todo carregamento tem 3 estados:** skeleton (`components/skeleton.js`) → conteúdo, vazio (`estadoVazio`) ou erro (toast + estado vazio com "Tentar novamente").
 6. **Ícones:** `import { Plus } from "lucide"` + `icon(Plus)` de `utils/icons.js`.
-7. **CSS de página** fica em `src/styles/pages/<pagina>.css`, envolto em `@layer pages { ... }`, usando apenas tokens (`var(--...)`) — nada de cores hex soltas.
-8. **Movimento:** use `.anim-in`, `stagger(container)`, `animarNumero`, `pulsar`, `tremer`, `destacar`, `comTransicao` (utils/motion.js). Anime só `transform`/`opacity`. Durações vêm dos tokens, então o modo "reduzir movimento" já zera tudo.
-9. **Acessibilidade:** `label for` correto, `aria-invalid` + `aria-describedby` em erros, um `<h1>` por página, alvos de toque ≥ 44px, foco visível (já global).
-10. **Responsivo mobile-first:** breakpoints 640 / 1024 / 1440 px. Tabelas usam `.table.table--responsive` com `data-label` em cada `<td>`.
+7. **Fundo sólido da marca com texto branco** usa `--brand-solid` (contraste AA); `--brand` é para texto, ícones, bordas e foco.
+8. **CSS de página** fica em `src/styles/pages/<pagina>.css`, envolto em `@layer pages { ... }`, usando apenas tokens (`var(--...)`) — nada de cores hex soltas.
+9. **Movimento:** use `.anim-in`, `stagger(container)`, `animarNumero`, `pulsar`, `tremer`, `destacar`, `comTransicao` (utils/motion.js). Anime só `transform`/`opacity`. Durações vêm dos tokens, então o modo "reduzir movimento" já zera tudo.
+10. **Acessibilidade:** `label for` correto, `aria-invalid` + `aria-describedby` em erros, um `<h1>` por página, alvos de toque ≥ 44px, foco visível (já global).
+11. **Responsivo mobile-first:** breakpoints 640 / 1024 / 1440 px. Tabelas usam `.table.table--responsive` com `data-label` em cada `<td>`.
 
 ## Componentes CSS disponíveis
 
@@ -114,7 +115,11 @@ const perfil = await iniciarPagina({ pagina: "fila", papeis: ["tecnico", "admin"
 | `.tabs` + `criarAbas()` | abas com indicador deslizante |
 | `.page-header`, `__eyebrow`, `__text`, `__subtitle`, `__actions`, `.back-link` | cabeçalho de página |
 | `.stack`, `.cluster`, `.spread`, `.truncate`, `.sr-only`, `.muted`, `.num`, `.mono` | utilitários |
-| `data-tone`: `info · warning · success · danger · orange · brand · neutral` | define `--tone` |
+| `data-tone`: `info · warning · success · danger · orange · brand · neutral` | define `--tone` (mapeado em `utilities.css`, vence o padrão dos componentes) |
+
+## Utilitários de texto
+
+`utils/format.js`: `formatarDataHora`, `formatarData`, `tempoRelativo`, `formatarDuracao`, `formatarNumeroChamado` (#0042), `saudacao`, `primeiroNome`, `iniciais`, `plural`, `normalizarBusca` (minúsculas e sem acentos, para buscas).
 
 ## Serviços
 

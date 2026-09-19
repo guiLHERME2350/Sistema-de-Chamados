@@ -18,6 +18,9 @@ import { exibirFlashPendente } from "./toast.js";
 
 const MAX_ITENS_MOBILE = 4;
 
+// Listeners globais do shell; renovado a cada desenho para não acumular (o shell é redesenhado após a sessão)
+let controleShell = new AbortController();
+
 function rotulo(item, role) {
     return typeof item.label === "function" ? item.label(role) : item.label;
 }
@@ -80,7 +83,7 @@ function sidebar(perfil, pagina) {
         recolher.setAttribute("aria-label", texto);
         recolher.title = texto;
     };
-    window.addEventListener("hd:prefs", sincronizarRecolher);
+    window.addEventListener("hd:prefs", sincronizarRecolher, { signal: controleShell.signal });
     sincronizarRecolher();
 
     const rodape = h(
@@ -119,7 +122,7 @@ function botaoTema() {
         btn.title = btn.getAttribute("aria-label");
     };
     btn.addEventListener("click", alternarTema);
-    window.addEventListener("hd:prefs", atualizar);
+    window.addEventListener("hd:prefs", atualizar, { signal: controleShell.signal });
     atualizar();
     return btn;
 }
@@ -208,6 +211,8 @@ function fab(pagina) {
 }
 
 function desenhar(app, perfil, pagina) {
+    controleShell.abort();
+    controleShell = new AbortController();
     app.querySelectorAll(":scope > .sidebar, :scope > .topbar, :scope > .bottom-nav, :scope > .fab").forEach((el) => el.remove());
     const main = app.querySelector("main");
     main.before(sidebar(perfil, pagina), topbar(perfil));
@@ -229,8 +234,8 @@ function registrarPaleta(perfil) {
 
     document.addEventListener("keydown", (e) => {
         const alvo = e.target;
-        const digitando = alvo.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(alvo.tagName);
-        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        const digitando = alvo.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(alvo.tagName) || Boolean(alvo.closest?.("dialog[open]"));
+        if ((e.ctrlKey || e.metaKey) && e.key?.toLowerCase() === "k") {
             e.preventDefault();
             abrir();
         } else if (e.key === "/" && !digitando) {

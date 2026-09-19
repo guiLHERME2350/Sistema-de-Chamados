@@ -18,7 +18,7 @@
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
-    min-height: 38px;
+    min-height: 40px;
     padding: 0 var(--space-4);
     border-radius: calc(var(--radius-md) - 3px);
     color: var(--text-muted);
@@ -38,7 +38,7 @@
 
 .tabs__tab[aria-selected="true"] .count {
     background: var(--brand-soft);
-    color: var(--brand);
+    color: var(--text);
 }
 
 .tabs__tab:focus-visible {
@@ -59,4 +59,10 @@
     transition:
         transform var(--dur-base) var(--ease-out),
         width var(--dur-base) var(--ease-out);
+}
+
+@media (pointer: coarse) {
+    .tabs__tab {
+        min-height: var(--tap);
+    }
 }

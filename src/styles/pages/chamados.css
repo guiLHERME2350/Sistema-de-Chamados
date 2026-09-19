@@ -214,9 +214,27 @@
         }
     }
 
-    /* Colunas menos importantes somem em telas médias */
-    @media (min-width: 768px) and (max-width: 1199px) {
-        .lc-tabela .lc-col--categoria {
+    /* Colunas menos importantes somem em telas médias (a 768px a tabela
+       chegava a 902px e rolava a página na horizontal) */
+    @media (min-width: 768px) and (max-width: 1279px) {
+        .lc-tabela .lc-col--categoria,
+        .lc-tabela .lc-col--tecnico {
+            display: none;
+        }
+
+        .lc-tabela .lc-col--titulo {
+            min-width: 180px;
+        }
+
+        /* Rede de segurança: se ainda não couber, rola só a tabela */
+        .lc-wrap {
+            overflow-x: auto;
+        }
+    }
+
+    @media (min-width: 768px) and (max-width: 1023px) {
+        .lc-tabela .lc-col--abertura,
+        .lc-tabela .lc-col--resolucao {
             display: none;
         }
     }

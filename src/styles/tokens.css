@@ -19,13 +19,16 @@
     /* Texto */
     --text: #f3f1f7;
     --text-muted: #a39db0;
-    --text-subtle: #7d7689;
+    --text-subtle: #8a8396; /* ≥ 4.5:1 sobre --surface-1 */
     --text-on-brand: #ffffff;
 
     /* Marca e semântica */
     --brand: #a855f7;
     --brand-hover: #b874f8;
     --brand-strong: #9333ea;
+    /* Fundo sólido com texto --text-on-brand (botão primário, bolha, skip-link): AA 4.5:1 */
+    --brand-solid: #9333ea;
+    --brand-solid-hover: #7e22ce;
     --info: #60a5fa;
     --warning: #fbbf24;
     --success: #34d399;
@@ -119,15 +122,17 @@
 
     --text: #17141d;
     --text-muted: #5f5970;
-    --text-subtle: #857f93;
+    --text-subtle: #736d80; /* ≥ 4.5:1 sobre --bg e --surface-1 */
 
     --brand: #7c3aed;
     --brand-hover: #6d28d9;
     --brand-strong: #5b21b6;
+    --brand-solid: #7c3aed;
+    --brand-solid-hover: #6d28d9;
     --info: #2563eb;
     --warning: #b45309;
     --success: #047857;
-    --danger: #dc2626;
+    --danger: #c62828; /* #dc2626 ficava em 4.4:1 sobre --bg */
     --orange: #c2410c;
 
     --shadow-sm: 0 1px 2px rgb(23 20 29 / 0.06);

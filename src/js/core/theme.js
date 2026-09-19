@@ -40,6 +40,10 @@ export function aplicarPrefs(prefs = getPrefs()) {
     raiz.dataset.motion = prefs.motion;
     raiz.dataset.density = prefs.density;
     raiz.dataset.sidebar = prefs.sidebar;
+
+    // Cor da barra do navegador no celular acompanha o fundo do tema
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.content = getComputedStyle(raiz).getPropertyValue("--bg").trim() || meta.content;
 }
 
 /** Tema efetivamente em uso ("light" | "dark"), resolvendo "system". */

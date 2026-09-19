@@ -145,6 +145,7 @@
     :root:not([data-motion="full"]) .is-shaking,
     :root:not([data-motion="full"]) .is-pulsing,
     :root:not([data-motion="full"]) .badge__dot,
+    :root:not([data-motion="full"]) .skeleton,
     :root:not([data-motion="full"]) .empty-state__icon::after {
         animation: none;
     }

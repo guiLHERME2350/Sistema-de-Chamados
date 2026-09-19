@@ -152,6 +152,12 @@
     background-position: right var(--space-3) center;
 }
 
+/* Seta do select com contraste ≥ 3:1 no tema claro (a cinza do escuro some no branco) */
+:root[data-theme="light"] .select,
+:root[data-theme="system"][data-system-theme="light"] .select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235f5970' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+
 /* Chips selecionáveis: <label class="chip"><input type="radio" name="cat"> <svg> Rede</label> */
 .chip-group {
     display: flex;
@@ -166,7 +172,7 @@
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
-    min-height: 40px;
+    min-height: var(--tap);
     padding: 0 var(--space-4);
     border: 1px solid var(--border);
     border-radius: var(--radius-full);
@@ -231,7 +237,7 @@
     align-items: center;
     justify-content: center;
     gap: var(--space-2);
-    min-height: 40px;
+    min-height: var(--tap);
     padding: 0 var(--space-2);
     border-radius: calc(var(--radius-md) - 3px);
     color: var(--text-muted);
@@ -326,7 +332,7 @@
 
 .switch input:checked::after {
     transform: translateX(18px);
-    background: #fff;
+    background: var(--text-on-brand);
 }
 
 .switch input:focus-visible {

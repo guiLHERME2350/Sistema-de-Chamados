@@ -401,8 +401,14 @@ function renderAcoes() {
 
 async function executarAcao(botao, acao) {
     if (acaoEmAndamento) return;
+    const statusAntes = chamado.status;
     const ok = await confirmar(acao.confirmacao());
     if (!ok) return;
+    // Outra pessoa mudou o chamado enquanto o diálogo estava aberto: não aplica a ação antiga
+    if (chamado.status !== statusAntes) {
+        toast.info("O chamado mudou enquanto você confirmava", { message: "Confira o status atual antes de agir." });
+        return;
+    }
 
     acaoEmAndamento = true;
     botao.setAttribute("aria-busy", "true");

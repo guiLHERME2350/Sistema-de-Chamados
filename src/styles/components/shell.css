@@ -76,7 +76,7 @@
     flex-shrink: 0;
     border-radius: var(--radius-md);
     background: linear-gradient(135deg, var(--brand), color-mix(in oklch, var(--brand) 55%, var(--info)));
-    color: #fff;
+    color: var(--text-on-brand);
     box-shadow: 0 6px 18px color-mix(in oklch, var(--brand) 40%, transparent);
 }
 
@@ -342,7 +342,8 @@ kbd {
 
 @media (max-width: 639px) {
     .page {
-        padding-bottom: calc(var(--bottom-nav-h) + var(--space-8) + env(safe-area-inset-bottom));
+        /* bottom-nav + FAB (56px + folga) não cobrem o fim do conteúdo */
+        padding-bottom: calc(var(--bottom-nav-h) + 56px + var(--space-6) + env(safe-area-inset-bottom));
     }
 }
 
@@ -383,21 +384,27 @@ kbd {
     display: inline-flex;
     align-items: center;
     gap: var(--space-1);
-    margin-bottom: var(--space-3);
+    min-height: var(--tap);
+    margin-bottom: var(--space-1);
     color: var(--text-muted);
     font-size: var(--fs-sm);
     font-weight: var(--fw-medium);
-    transition: color var(--dur-fast) var(--ease-out), gap var(--dur-fast) var(--ease-out);
+    transition: color var(--dur-fast) var(--ease-out);
 }
 
 .back-link svg {
     width: 16px;
     height: 16px;
+    transition: transform var(--dur-fast) var(--ease-out);
 }
 
+/* Seta desliza com transform (antes animava gap, que força layout) */
 .back-link:hover {
     color: var(--text);
-    gap: var(--space-2);
+}
+
+.back-link:hover svg {
+    transform: translateX(-3px);
 }
 
 /* ---------- Bottom nav (mobile) ---------- */
@@ -471,8 +478,8 @@ kbd {
     width: 56px;
     height: 56px;
     border-radius: 18px;
-    background: var(--brand);
-    color: #fff;
+    background: var(--brand-solid);
+    color: var(--text-on-brand);
     box-shadow: 0 10px 28px color-mix(in oklch, var(--brand) 45%, transparent);
     transition: transform var(--dur-base) var(--ease-spring);
     view-transition-name: fab;
@@ -538,7 +545,7 @@ kbd {
 
 .menu-popover .nav-item {
     width: 100%;
-    min-height: 40px;
+    min-height: var(--tap);
 }
 
 /* Navegadores sem anchor positioning: menu preso ao canto da topbar */

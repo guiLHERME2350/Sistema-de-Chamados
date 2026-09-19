@@ -3,6 +3,8 @@
 > Redesign completo do front-end do sistema de chamados: identidade visual, arquitetura de código, responsividade e movimento.
 > **Fora de escopo por enquanto:** segurança e backend (Firebase continua como está: Auth + Firestore, mesmas coleções e campos).
 
+> **Status (19/09/2026):** fases 0 a 6 implementadas. Pendentes do roteiro: testes E2E com Playwright (exigem um usuário de teste no Firebase) e os itens do backlog (seção 11) e de backend (seção 12). Convenções atuais em [docs/ARQUITETURA.md](docs/ARQUITETURA.md).
+
 ---
 
 ## 1. Diagnóstico do projeto atual

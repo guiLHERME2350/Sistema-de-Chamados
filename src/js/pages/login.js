@@ -20,19 +20,17 @@ for (const el of $$("[data-icone]")) {
 
 // ---------- Tema ----------
 const botaoTema = $("#alternar-tema");
-const metaCor = $('meta[name="theme-color"]');
 
 function atualizarBotaoTema() {
     const escuro = temaAtual() === "dark";
     render(botaoTema, icon(escuro ? Sun : Moon));
     botaoTema.setAttribute("aria-label", escuro ? "Ativar tema claro" : "Ativar tema escuro");
     botaoTema.title = botaoTema.getAttribute("aria-label");
-    metaCor?.setAttribute("content", getComputedStyle(document.documentElement).getPropertyValue("--bg").trim());
 }
 
 botaoTema.addEventListener("click", alternarTema);
+// theme.js também dispara hd:prefs quando o tema do sistema muda
 window.addEventListener("hd:prefs", atualizarBotaoTema);
-matchMedia("(prefers-color-scheme: light)").addEventListener("change", atualizarBotaoTema);
 atualizarBotaoTema();
 
 // ---------- Mostrar / ocultar senha ----------
