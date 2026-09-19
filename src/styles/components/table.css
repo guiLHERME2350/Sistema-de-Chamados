@@ -1,0 +1,119 @@
+/* Tabela responsiva: no mobile cada linha vira um card.
+   Cada <td> recebe data-label="Coluna" para o rótulo aparecer no mobile. */
+.table-wrap {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    font-size: var(--fs-sm);
+}
+
+.table th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding: var(--space-3) var(--space-4);
+    background: var(--surface-1);
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.table td {
+    padding: var(--row-pad-y) var(--space-4);
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+}
+
+.table tbody tr {
+    position: relative;
+    transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.table tbody tr[data-href] {
+    cursor: pointer;
+}
+
+.table tbody tr[data-href]:hover {
+    background: var(--surface-2);
+}
+
+.table tbody tr:focus-within {
+    background: var(--surface-2);
+}
+
+/* Link que cobre a linha inteira (acessível: o link real fica na célula do número/título) */
+.row-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+}
+
+.row-link:focus-visible {
+    outline: none;
+}
+
+.table tbody tr:has(.row-link:focus-visible) {
+    box-shadow: inset 0 0 0 2px var(--brand);
+}
+
+@media (max-width: 767px) {
+    .table--responsive thead {
+        display: none;
+    }
+
+    .table--responsive,
+    .table--responsive tbody {
+        display: block;
+    }
+
+    .table--responsive tbody {
+        display: grid;
+        gap: var(--space-3);
+        padding: var(--space-3);
+    }
+
+    .table--responsive tr {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-2) var(--space-3);
+        padding: var(--space-4);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        background: var(--surface-1);
+    }
+
+    .table--responsive td {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        padding: 0;
+        border: 0;
+        min-width: 0;
+    }
+
+    .table--responsive td[data-label]::before {
+        content: attr(data-label);
+        color: var(--text-subtle);
+        font-size: var(--fs-xs);
+        font-weight: var(--fw-medium);
+    }
+
+    .table--responsive td.cell-full {
+        grid-column: 1 / -1;
+    }
+
+    .table--responsive td.cell-full::before {
+        display: none;
+    }
+}

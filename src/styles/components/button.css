@@ -1,0 +1,151 @@
+/* <button class="btn btn--primary"> · variantes: primary | secondary | ghost | danger
+   tamanhos: btn--sm | btn--lg · só ícone: btn--icon · carregando: aria-busy="true" */
+.btn {
+    --btn-bg: var(--surface-2);
+    --btn-fg: var(--text);
+    --btn-border: var(--border);
+    --btn-bg-hover: var(--surface-3);
+
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: var(--tap);
+    padding: 0 var(--space-4);
+    border: 1px solid var(--btn-border);
+    border-radius: var(--radius-md);
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-semibold);
+    line-height: 1;
+    white-space: nowrap;
+    user-select: none;
+    transition:
+        background-color var(--dur-fast) var(--ease-out),
+        border-color var(--dur-fast) var(--ease-out),
+        color var(--dur-fast) var(--ease-out),
+        transform var(--dur-fast) var(--ease-out),
+        box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.btn:hover:not(:disabled) {
+    background: var(--btn-bg-hover);
+}
+
+.btn:active:not(:disabled) {
+    transform: scale(0.97);
+}
+
+.btn:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.btn--primary {
+    --btn-bg: var(--brand);
+    --btn-fg: var(--text-on-brand);
+    --btn-border: transparent;
+    --btn-bg-hover: var(--brand-hover);
+}
+
+.btn--primary:hover:not(:disabled) {
+    box-shadow: 0 6px 20px color-mix(in oklch, var(--brand) 35%, transparent);
+}
+
+.btn--secondary {
+    --btn-bg: var(--surface-2);
+}
+
+.btn--ghost {
+    --btn-bg: transparent;
+    --btn-border: transparent;
+    --btn-bg-hover: var(--surface-2);
+    --btn-fg: var(--text-muted);
+}
+
+.btn--ghost:hover:not(:disabled) {
+    color: var(--text);
+}
+
+.btn--danger {
+    --btn-bg: var(--danger-soft);
+    --btn-fg: var(--danger);
+    --btn-border: color-mix(in oklch, var(--danger) 30%, transparent);
+    --btn-bg-hover: color-mix(in oklch, var(--danger) 24%, transparent);
+}
+
+.btn--success {
+    --btn-bg: var(--success);
+    --btn-fg: #06251a;
+    --btn-border: transparent;
+    --btn-bg-hover: color-mix(in oklch, var(--success) 85%, white);
+}
+
+.btn--sm {
+    min-height: 34px;
+    padding: 0 var(--space-3);
+    font-size: var(--fs-xs);
+}
+
+.btn--lg {
+    min-height: 52px;
+    padding: 0 var(--space-5);
+    font-size: var(--fs-md);
+}
+
+.btn--block {
+    width: 100%;
+}
+
+.btn--icon {
+    width: var(--tap);
+    padding: 0;
+}
+
+.btn--icon.btn--sm {
+    width: 34px;
+}
+
+/* Estado de carregamento: esconde o conteúdo e mostra um spinner */
+.btn[aria-busy="true"] {
+    color: transparent !important;
+    pointer-events: none;
+}
+
+.btn[aria-busy="true"]::after {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--btn-fg);
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+.btn[aria-busy="true"] > * {
+    visibility: hidden;
+}
+
+/* Spinner avulso */
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}

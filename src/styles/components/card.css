@@ -1,0 +1,126 @@
+/* .card · .card--interactive (link/clicável) · .card__header · .card__title */
+.card {
+    container-type: inline-size;
+    position: relative;
+    padding: var(--space-5);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface-1);
+    box-shadow: var(--shadow-sm);
+}
+
+.card--flush {
+    padding: 0;
+    overflow: hidden;
+}
+
+.card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+}
+
+.card__title {
+    font-size: var(--fs-md);
+    font-weight: var(--fw-semibold);
+}
+
+.card--interactive {
+    display: block;
+    cursor: pointer;
+    transition:
+        transform var(--dur-base) var(--ease-out),
+        border-color var(--dur-base) var(--ease-out),
+        box-shadow var(--dur-base) var(--ease-out);
+}
+
+.card--interactive:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in oklch, var(--brand) 55%, var(--border));
+    box-shadow: var(--shadow-md);
+}
+
+.card--interactive:active {
+    transform: translateY(0) scale(0.99);
+}
+
+.card--interactive:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
+
+/* Stat card: <a class="card card--interactive stat" data-tone="info"> <span class="stat__icon">svg</span> <span class="stat__label"> <strong class="stat__value num"> */
+.stat {
+    --tone: var(--brand);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+        "label icon"
+        "value icon"
+        "meta meta";
+    align-items: start;
+    gap: var(--space-1) var(--space-3);
+    overflow: hidden;
+}
+
+.stat::before {
+    content: "";
+    position: absolute;
+    inset: auto -30% -60% auto;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in oklch, var(--tone) 22%, transparent), transparent 70%);
+    pointer-events: none;
+    transition: transform var(--dur-slow) var(--ease-out);
+}
+
+.stat:hover::before {
+    transform: scale(1.25);
+}
+
+.stat__label {
+    grid-area: label;
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-medium);
+    color: var(--text-muted);
+}
+
+.stat__value {
+    grid-area: value;
+    font-size: var(--fs-2xl);
+    font-weight: var(--fw-bold);
+    line-height: 1.1;
+}
+
+.stat__icon {
+    grid-area: icon;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: color-mix(in oklch, var(--tone) 16%, transparent);
+    color: var(--tone);
+}
+
+.stat__icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+.stat__meta {
+    grid-area: meta;
+    font-size: var(--fs-xs);
+    color: var(--text-subtle);
+}
+
+[data-tone="info"] { --tone: var(--info); }
+[data-tone="warning"] { --tone: var(--warning); }
+[data-tone="success"] { --tone: var(--success); }
+[data-tone="danger"] { --tone: var(--danger); }
+[data-tone="orange"] { --tone: var(--orange); }
+[data-tone="brand"] { --tone: var(--brand); }
+[data-tone="neutral"] { --tone: var(--text-muted); }

@@ -1,0 +1,105 @@
+/* <dialog class="dialog"> com entrada/saída animada via @starting-style */
+.dialog {
+    width: min(440px, calc(100vw - 2 * var(--space-4)));
+    margin: auto;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface-1);
+    color: var(--text);
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+    transition:
+        opacity var(--dur-base) var(--ease-out),
+        transform var(--dur-base) var(--ease-out),
+        overlay var(--dur-base) allow-discrete,
+        display var(--dur-base) allow-discrete;
+}
+
+.dialog[open] {
+    opacity: 1;
+    transform: none;
+}
+
+@starting-style {
+    .dialog[open] {
+        opacity: 0;
+        transform: translateY(8px) scale(0.96);
+    }
+}
+
+.dialog::backdrop {
+    background: var(--overlay);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    transition:
+        opacity var(--dur-base) var(--ease-out),
+        overlay var(--dur-base) allow-discrete,
+        display var(--dur-base) allow-discrete;
+}
+
+.dialog[open]::backdrop {
+    opacity: 1;
+}
+
+@starting-style {
+    .dialog[open]::backdrop {
+        opacity: 0;
+    }
+}
+
+.dialog--wide {
+    width: min(640px, calc(100vw - 2 * var(--space-4)));
+}
+
+.dialog__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-5);
+}
+
+.dialog__icon {
+    --tone: var(--brand);
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: color-mix(in oklch, var(--tone) 16%, transparent);
+    color: var(--tone);
+}
+
+.dialog__icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+.dialog__title {
+    font-size: var(--fs-lg);
+}
+
+.dialog__message {
+    color: var(--text-muted);
+    font-size: var(--fs-sm);
+}
+
+.dialog__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--space-5);
+    border-top: 1px solid var(--border);
+    background: var(--surface-2);
+}
+
+@media (max-width: 480px) {
+    .dialog__footer {
+        flex-direction: column-reverse;
+    }
+
+    .dialog__footer .btn {
+        width: 100%;
+    }
+}

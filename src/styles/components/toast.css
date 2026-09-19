@@ -1,0 +1,113 @@
+.toast-region {
+    position: fixed;
+    z-index: 900;
+    right: var(--space-4);
+    bottom: var(--space-4);
+    display: flex;
+    flex-direction: column-reverse;
+    gap: var(--space-2);
+    width: min(380px, calc(100vw - 2 * var(--space-4)));
+    pointer-events: none;
+}
+
+@media (max-width: 639px) {
+    .toast-region {
+        bottom: calc(var(--bottom-nav-h) + var(--space-3) + env(safe-area-inset-bottom));
+        right: 50%;
+        transform: translateX(50%);
+    }
+}
+
+.toast {
+    --tone: var(--brand);
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: start;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface-1);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    pointer-events: auto;
+    animation: toast-in var(--dur-slow) var(--ease-spring);
+}
+
+.toast.is-leaving {
+    animation: toast-out var(--dur-base) var(--ease-in-out) forwards;
+}
+
+.toast[data-tone="success"] { --tone: var(--success); }
+.toast[data-tone="error"] { --tone: var(--danger); }
+.toast[data-tone="info"] { --tone: var(--info); }
+.toast[data-tone="warning"] { --tone: var(--warning); }
+
+.toast__icon {
+    display: grid;
+    place-items: center;
+    margin-top: 1px;
+    color: var(--tone);
+}
+
+.toast__icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.toast__body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: var(--fs-sm);
+    min-width: 0;
+}
+
+.toast__title {
+    font-weight: var(--fw-semibold);
+}
+
+.toast__message {
+    color: var(--text-muted);
+}
+
+.toast__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+.toast__progress {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 100%;
+    background: var(--tone);
+    transform-origin: left;
+    animation: toast-progress linear forwards;
+}
+
+.toast:hover .toast__progress {
+    animation-play-state: paused;
+}
+
+@keyframes toast-in {
+    from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.96);
+    }
+}
+
+@keyframes toast-out {
+    to {
+        opacity: 0;
+        transform: translateX(24px) scale(0.96);
+    }
+}
+
+@keyframes toast-progress {
+    from { transform: scaleX(1); }
+    to { transform: scaleX(0); }
+}

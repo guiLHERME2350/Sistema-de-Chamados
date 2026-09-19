@@ -1,0 +1,24 @@
+/* Ordem da cascata: camadas posteriores vencem, independente da especificidade */
+@layer reset, tokens, base, components, motion, pages, utilities;
+
+@import "./reset.css" layer(reset);
+@import "./tokens.css" layer(tokens);
+@import "./base.css" layer(base);
+
+@import "./components/button.css" layer(components);
+@import "./components/form.css" layer(components);
+@import "./components/card.css" layer(components);
+@import "./components/badge.css" layer(components);
+@import "./components/table.css" layer(components);
+@import "./components/tabs.css" layer(components);
+@import "./components/toast.css" layer(components);
+@import "./components/dialog.css" layer(components);
+@import "./components/skeleton.css" layer(components);
+@import "./components/empty-state.css" layer(components);
+@import "./components/avatar.css" layer(components);
+@import "./components/shell.css" layer(components);
+
+@import "./motion.css" layer(motion);
+@import "./utilities.css" layer(utilities);
+
+/* Estilos de página: cada arquivo em src/styles/pages/ envolve seu conteúdo em @layer pages { } */

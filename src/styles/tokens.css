@@ -1,0 +1,158 @@
+/* ==========================================================
+   Design tokens
+   Tema escuro é a base; o claro sobrescreve só as cores.
+   data-theme no <html>: "light" | "dark" | "system"
+   ========================================================== */
+
+:root {
+    color-scheme: dark;
+
+    /* Superfícies */
+    --bg: #0f0d13;
+    --surface-1: #17141d;
+    --surface-2: #211d29;
+    --surface-3: #2a2533;
+    --border: #2e2938;
+    --border-strong: #433c50;
+    --overlay: rgb(8 6 12 / 0.6);
+
+    /* Texto */
+    --text: #f3f1f7;
+    --text-muted: #a39db0;
+    --text-subtle: #7d7689;
+    --text-on-brand: #ffffff;
+
+    /* Marca e semântica */
+    --brand: #a855f7;
+    --brand-hover: #b874f8;
+    --brand-strong: #9333ea;
+    --info: #60a5fa;
+    --warning: #fbbf24;
+    --success: #34d399;
+    --danger: #f87171;
+    --orange: #fb923c;
+
+    /* Fundos suaves derivados (badges, alertas, destaques) */
+    --brand-soft: color-mix(in oklch, var(--brand) 16%, transparent);
+    --info-soft: color-mix(in oklch, var(--info) 15%, transparent);
+    --warning-soft: color-mix(in oklch, var(--warning) 15%, transparent);
+    --success-soft: color-mix(in oklch, var(--success) 15%, transparent);
+    --danger-soft: color-mix(in oklch, var(--danger) 15%, transparent);
+    --orange-soft: color-mix(in oklch, var(--orange) 15%, transparent);
+    --neutral-soft: color-mix(in oklch, var(--text-muted) 14%, transparent);
+
+    --focus-ring: 0 0 0 2px var(--bg), 0 0 0 4px var(--brand);
+
+    /* Sombras (no escuro a profundidade vem mais da borda) */
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
+    --shadow-md: 0 4px 12px rgb(0 0 0 / 0.35);
+    --shadow-lg: 0 16px 40px rgb(0 0 0 / 0.45);
+
+    /* Tipografia */
+    --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Code", monospace;
+
+    --fs-xs: 0.75rem;
+    --fs-sm: 0.875rem;
+    --fs-md: 1rem;
+    --fs-lg: 1.25rem;
+    --fs-xl: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+    --fs-2xl: clamp(2rem, 1.5rem + 2.2vw, 3rem);
+
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --fw-bold: 700;
+
+    /* Espaçamento (base 4) */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.5rem;
+    --space-6: 2rem;
+    --space-7: 2.5rem;
+    --space-8: 3rem;
+
+    /* Raios */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --radius-full: 999px;
+
+    /* Movimento */
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --dur-fast: 150ms;
+    --dur-base: 250ms;
+    --dur-slow: 400ms;
+    --stagger: 40ms;
+
+    /* Layout */
+    --sidebar-w: 240px;
+    --sidebar-rail-w: 72px;
+    --topbar-h: 64px;
+    --bottom-nav-h: 64px;
+    --content-max: 1200px;
+    --tap: 44px;
+
+    /* Densidade (tabelas/listas) */
+    --row-pad-y: var(--space-4);
+}
+
+/* ---------- Tema claro ----------
+   data-system-theme é definido pelo script inline do <head> e por theme.js
+   a partir de prefers-color-scheme, para o modo "system". */
+:root[data-theme="light"],
+:root[data-theme="system"][data-system-theme="light"] {
+    color-scheme: light;
+
+    --bg: #f7f6f9;
+    --surface-1: #ffffff;
+    --surface-2: #f1eff5;
+    --surface-3: #e8e5ee;
+    --border: #e3e0ea;
+    --border-strong: #cdc8d7;
+    --overlay: rgb(23 20 29 / 0.4);
+
+    --text: #17141d;
+    --text-muted: #5f5970;
+    --text-subtle: #857f93;
+
+    --brand: #7c3aed;
+    --brand-hover: #6d28d9;
+    --brand-strong: #5b21b6;
+    --info: #2563eb;
+    --warning: #b45309;
+    --success: #047857;
+    --danger: #dc2626;
+    --orange: #c2410c;
+
+    --shadow-sm: 0 1px 2px rgb(23 20 29 / 0.06);
+    --shadow-md: 0 4px 14px rgb(23 20 29 / 0.08);
+    --shadow-lg: 0 18px 44px rgb(23 20 29 / 0.14);
+}
+
+/* ---------- Densidade compacta ---------- */
+:root[data-density="compact"] {
+    --row-pad-y: var(--space-2);
+}
+
+/* ---------- Movimento reduzido ---------- */
+@media (prefers-reduced-motion: reduce) {
+    :root:not([data-motion="full"]) {
+        --dur-fast: 0.01ms;
+        --dur-base: 0.01ms;
+        --dur-slow: 0.01ms;
+        --stagger: 0ms;
+    }
+}
+
+:root[data-motion="reduce"] {
+    --dur-fast: 0.01ms;
+    --dur-base: 0.01ms;
+    --dur-slow: 0.01ms;
+    --stagger: 0ms;
+}

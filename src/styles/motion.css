@@ -1,0 +1,159 @@
+/* ==========================================================
+   Movimento
+   - Só transform/opacity nas animações de entrada
+   - Durações vêm dos tokens (zeradas em movimento reduzido)
+   ========================================================== */
+
+/* ---------- Transição entre páginas (MPA) ---------- */
+@view-transition {
+    navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation: none;
+}
+
+::view-transition-old(page) {
+    animation: vt-page-out var(--dur-fast) var(--ease-in-out) both;
+}
+
+::view-transition-new(page) {
+    animation: vt-page-in var(--dur-slow) var(--ease-out) both;
+}
+
+/* Sidebar, topbar e navegação ficam parados entre páginas */
+::view-transition-group(sidebar),
+::view-transition-group(topbar),
+::view-transition-group(bottom-nav),
+::view-transition-group(fab) {
+    animation-duration: 0s;
+}
+
+/* Elementos compartilhados (ex.: número do chamado da lista → detalhe) */
+::view-transition-group(*) {
+    animation-duration: var(--dur-slow);
+    animation-timing-function: var(--ease-out);
+}
+
+@keyframes vt-page-out {
+    to {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+}
+
+@keyframes vt-page-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+        animation: none !important;
+    }
+}
+
+:root[data-motion="reduce"]::view-transition-group(*),
+:root[data-motion="reduce"]::view-transition-old(*),
+:root[data-motion="reduce"]::view-transition-new(*) {
+    animation: none !important;
+}
+
+/* ---------- Utilitários de entrada ---------- */
+.anim-in {
+    animation: fade-in-up var(--dur-slow) var(--ease-out) backwards;
+}
+
+/* Entrada escalonada: stagger(container) em utils/motion.js define --i em cada filho */
+.stagger > * {
+    animation: fade-in-up var(--dur-slow) var(--ease-out) backwards;
+    animation-delay: calc(var(--i, 0) * var(--stagger));
+}
+
+.is-pulsing {
+    animation: pulse-ring 900ms var(--ease-out);
+}
+
+.is-shaking {
+    animation: shake 420ms var(--ease-in-out);
+}
+
+.is-highlight {
+    animation: highlight 1.6s var(--ease-out);
+}
+
+/* ---------- Keyframes compartilhados ---------- */
+@keyframes fade-in {
+    from { opacity: 0; }
+}
+
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+}
+
+@keyframes pop-in {
+    from {
+        opacity: 0;
+        transform: scale(0.6);
+    }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes grow-y {
+    from { transform: translateY(-50%) scaleY(0); }
+}
+
+@keyframes grow-x {
+    from { transform: scaleX(0); }
+}
+
+@keyframes dot-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 color-mix(in oklch, currentColor 50%, transparent); }
+    50% { box-shadow: 0 0 0 4px transparent; }
+}
+
+@keyframes pulse-ring {
+    0% { box-shadow: 0 0 0 0 color-mix(in oklch, var(--tone, var(--brand)) 45%, transparent); }
+    100% { box-shadow: 0 0 0 14px transparent; }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(7px); }
+    60% { transform: translateX(-5px); }
+    80% { transform: translateX(3px); }
+}
+
+@keyframes highlight {
+    from { background-color: var(--brand-soft); }
+}
+
+/* Em movimento reduzido, animações de "chamar atenção" somem */
+@media (prefers-reduced-motion: reduce) {
+    :root:not([data-motion="full"]) .is-shaking,
+    :root:not([data-motion="full"]) .is-pulsing,
+    :root:not([data-motion="full"]) .badge__dot,
+    :root:not([data-motion="full"]) .empty-state__icon::after {
+        animation: none;
+    }
+}
+
+:root[data-motion="reduce"] .is-shaking,
+:root[data-motion="reduce"] .is-pulsing,
+:root[data-motion="reduce"] .badge__dot,
+:root[data-motion="reduce"] .skeleton,
+:root[data-motion="reduce"] .empty-state__icon::after {
+    animation: none;
+}

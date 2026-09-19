@@ -1,0 +1,55 @@
+/* <span class="badge" data-tone="info"><span class="badge__dot"></span>Aberto</span>
+   Geradas por src/js/components/badges.js */
+.badge {
+    --tone: var(--text-muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 24px;
+    padding: 0 var(--space-2);
+    border-radius: var(--radius-full);
+    background: color-mix(in oklch, var(--tone) 15%, transparent);
+    color: var(--tone);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    white-space: nowrap;
+    transition: background-color var(--dur-slow) var(--ease-out), color var(--dur-slow) var(--ease-out);
+}
+
+.badge__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+}
+
+/* Status "em análise" pulsa discretamente para parecer vivo */
+.badge[data-status="analise"] .badge__dot {
+    animation: dot-pulse 1.8s var(--ease-in-out) infinite;
+}
+
+.badge--outline {
+    background: transparent;
+    box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--tone) 40%, transparent);
+}
+
+.badge svg {
+    width: 12px;
+    height: 12px;
+}
+
+/* Contador pequeno (abas, menu) */
+.count {
+    display: inline-grid;
+    place-items: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: var(--radius-full);
+    background: var(--surface-3);
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: var(--fw-semibold);
+}

@@ -1,0 +1,28 @@
+/* <span class="avatar" style="--hue: 280">AS</span> — gerado por avatar() em components/avatar.js */
+.avatar {
+    --size: 36px;
+    display: inline-grid;
+    place-items: center;
+    width: var(--size);
+    height: var(--size);
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: oklch(0.55 0.14 var(--hue, 300));
+    color: #fff;
+    font-size: calc(var(--size) * 0.38);
+    font-weight: var(--fw-semibold);
+    letter-spacing: 0.02em;
+    user-select: none;
+}
+
+.avatar--sm {
+    --size: 28px;
+}
+
+.avatar--lg {
+    --size: 48px;
+}
+
+.avatar--xl {
+    --size: 72px;
+}

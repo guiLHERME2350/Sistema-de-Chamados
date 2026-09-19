@@ -1,0 +1,62 @@
+/* <div class="tabs" role="tablist"> <button class="tabs__tab" role="tab" aria-selected="true">Fila <span class="count">3</span></button> ... <span class="tabs__indicator"></span></div>
+   O indicador é posicionado por src/js/components/tabs.js */
+.tabs {
+    position: relative;
+    display: inline-flex;
+    gap: var(--space-1);
+    padding: var(--space-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface-2);
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.tabs__tab {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 38px;
+    padding: 0 var(--space-4);
+    border-radius: calc(var(--radius-md) - 3px);
+    color: var(--text-muted);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-semibold);
+    white-space: nowrap;
+    transition: color var(--dur-fast) var(--ease-out);
+}
+
+.tabs__tab:hover {
+    color: var(--text);
+}
+
+.tabs__tab[aria-selected="true"] {
+    color: var(--text);
+}
+
+.tabs__tab[aria-selected="true"] .count {
+    background: var(--brand-soft);
+    color: var(--brand);
+}
+
+.tabs__tab:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
+
+.tabs__indicator {
+    position: absolute;
+    top: var(--space-1);
+    left: 0;
+    height: calc(100% - 2 * var(--space-1));
+    width: var(--indicator-w, 0);
+    transform: translateX(var(--indicator-x, 0));
+    border-radius: calc(var(--radius-md) - 3px);
+    background: var(--surface-1);
+    box-shadow: var(--shadow-sm), inset 0 0 0 1px var(--border);
+    transition:
+        transform var(--dur-base) var(--ease-out),
+        width var(--dur-base) var(--ease-out);
+}
