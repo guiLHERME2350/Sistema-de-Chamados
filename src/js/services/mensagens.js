@@ -62,8 +62,11 @@ export function observarMensagens(chamadoId, callback, aoErrar = console.error) 
 }
 
 export function enviarMensagem(chamadoId, texto, perfil) {
+    const conteudo = String(texto || "").trim();
+    if (!conteudo) return Promise.reject(new Error("Mensagem vazia."));
+    if (!perfil?.uid) return Promise.reject(new Error("Sem perfil para enviar a mensagem."));
     return addDoc(ref(chamadoId), {
-        texto,
+        texto: conteudo,
         usuarioId: perfil.uid,
         usuarioNome: perfil.nome,
         data: serverTimestamp(),

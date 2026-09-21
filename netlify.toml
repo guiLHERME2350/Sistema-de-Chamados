@@ -1,0 +1,15 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# Cada .html existe de verdade (Vite multi-page): não precisa de rewrite para /index.html.
+# Cache longo só nos assets com hash; HTML nunca em cache para o deploy novo entrar na hora.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"

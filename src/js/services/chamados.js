@@ -124,6 +124,22 @@ export function podeVerChamado(chamado, perfil) {
 }
 
 /**
+ * Técnico/admin só pode conversar depois de assumir.
+ * Regra: com status "aberto", quem não é dono nem responsável precisa assumir antes.
+ * O dono (usuario) sempre pode conversar no próprio chamado.
+ */
+export function precisaAssumirParaConversar(chamado, perfil) {
+    if (!chamado || !perfil) return false;
+    if (perfil.role === "usuario") return false;
+    if (chamado.usuarioId && chamado.usuarioId === perfil.uid) return false;
+    return chamado.status === "aberto" && chamado.tecnicoId !== perfil.uid;
+}
+
+export function podeConversarNoChamado(chamado, perfil) {
+    return !precisaAssumirParaConversar(chamado, perfil);
+}
+
+/**
  * Cria o chamado com número sequencial (contador em Configurações/Contadorchamados).
  * @returns {Promise<{id: string, numero: number}>}
  */

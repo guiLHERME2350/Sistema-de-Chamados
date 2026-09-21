@@ -69,11 +69,18 @@ async function buscarPerfil(usuario) {
     if (!documento) return null;
 
     const dados = documento.data();
+    // O campo no Firestore pode vir com maiúscula/espaço ("Admin", "tecnico ").
+    // Normaliza para o contrato do app: "usuario" | "tecnico" | "admin".
+    const role = String(dados.role || "").trim().toLowerCase();
+    if (!TODOS_OS_PAPEIS.includes(role)) {
+        console.error(`Papel inválido em users/${documento.id}: ${JSON.stringify(dados.role)}. Esperado um de: ${TODOS_OS_PAPEIS.join(", ")}.`);
+        return null;
+    }
     return {
         uid: usuario.uid,
         nome: dados.Nome || usuario.email,
         email: dados.Email || usuario.email,
-        role: dados.role,
+        role,
     };
 }
 
@@ -93,7 +100,14 @@ export async function exigirSessao(papeis = TODOS_OS_PAPEIS) {
     }
 
     let perfil = perfilEmCache();
-    if (!perfil || perfil.uid !== usuario.uid) {
+    // Normaliza cache antigo ("Admin", "tecnico ") para o contrato em minúsculas.
+    if (perfil) {
+        perfil.role = String(perfil.role || "").trim().toLowerCase();
+        if (perfil.uid !== usuario.uid || !TODOS_OS_PAPEIS.includes(perfil.role)) {
+            perfil = null;
+        }
+    }
+    if (!perfil) {
         perfil = await buscarPerfil(usuario);
         if (!perfil) {
             console.error("Usuário não encontrado na coleção users.");
@@ -101,6 +115,17 @@ export async function exigirSessao(papeis = TODOS_OS_PAPEIS) {
             return new Promise(() => {});
         }
         salvarCache(perfil);
+    }
+
+    if (!papeis.includes(perfil.role)) {
+        // O papel pode ter sido promovido no Firestore depois do login
+        // (ex.: usuario → admin) e o cache ainda tem o papel antigo.
+        // Confere uma vez no servidor antes de expulsar para o dashboard.
+        const atual = await buscarPerfil(usuario).catch(() => null);
+        if (atual && atual.role !== perfil.role) {
+            perfil = atual;
+            salvarCache(perfil);
+        }
     }
 
     if (!papeis.includes(perfil.role)) {

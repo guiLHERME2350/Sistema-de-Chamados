@@ -123,6 +123,8 @@ listarChamados(perfil)                         → Promise<Chamado[]> (mais rece
 observarChamados(perfil, (chamados, mudancas) => {}) → unsubscribe   // tempo real
 obterChamado(id) / observarChamado(id, cb)
 podeVerChamado(chamado, perfil)
+precisaAssumirParaConversar(chamado, perfil)   → true quando técnico/admin ainda não assumiu um chamado "aberto"
+podeConversarNoChamado(chamado, perfil)        → negação da anterior; usada pelo composer em chamado.js
 criarChamado({ titulo, categoria, descricao, prioridade }, perfil) → { id, numero }
 assumirChamado(id, perfil) · resolverChamado(id) · reabrirChamado(id)
 moverChamado(chamado, novoStatus, perfil)      // regras de transição (Kanban)

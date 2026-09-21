@@ -29,7 +29,9 @@ import { movimentoReduzido } from "../core/theme.js";
 import {
     assumirChamado,
     observarChamado,
+    podeConversarNoChamado,
     podeVerChamado,
+    precisaAssumirParaConversar,
     reabrirChamado,
     resolverChamado,
 } from "../services/chamados.js";
@@ -846,7 +848,24 @@ function autoAjustar(campo) {
 }
 
 function atualizarComposer() {
+    if (!chamado) return;
+    // Técnico/admin com chamado "aberto" precisa assumir antes de conversar.
+    if (precisaAssumirParaConversar(chamado, perfil)) {
+        el.aviso.hidden = false;
+        // Mantém o ícone prependido em prepararComposer e troca só o texto
+        if (el.aviso.lastChild) el.aviso.lastChild.textContent = "Assuma o chamado para participar da conversa. O chat libera após assumir.";
+        el.campo.disabled = true;
+        el.enviar.disabled = true;
+        el.campo.placeholder = "Assuma o chamado para conversar…";
+        return;
+    }
+    el.campo.disabled = false;
+    el.campo.placeholder = "Escreva uma mensagem…";
     el.aviso.hidden = chamado.status !== "resolvido";
+    if (!el.aviso.hidden && el.aviso.lastChild) {
+        el.aviso.lastChild.textContent = "Este chamado foi resolvido. Mensagens novas continuam visíveis para o técnico.";
+    }
+    el.enviar.disabled = !el.campo.value.trim();
 }
 
 function prepararComposer() {
@@ -854,7 +873,7 @@ function prepararComposer() {
     el.aviso.prepend(icon(Info));
 
     const atualizarBotao = () => {
-        el.enviar.disabled = !el.campo.value.trim();
+        el.enviar.disabled = !podeConversarNoChamado(chamado, perfil) || !el.campo.value.trim();
     };
 
     el.campo.addEventListener("input", () => {
@@ -873,6 +892,11 @@ function prepararComposer() {
         e.preventDefault();
         const texto = el.campo.value.trim();
         if (!texto || !chamado) return;
+        if (!podeConversarNoChamado(chamado, perfil)) {
+            toast.warning("Assuma o chamado antes de conversar", { message: "Clique em “Assumir chamado” e depois envie sua mensagem." });
+            atualizarComposer();
+            return;
+        }
 
         // Otimista: o snapshot local já mostra a bolha como pendente
         el.campo.value = "";
@@ -939,7 +963,8 @@ function aoReceberChamado(c) {
     atualizarComposer();
 
     if (!anterior) {
-        el.campo.disabled = false;
+        // atualizarComposer() acima já definiu disabled/placeholder/aviso
+        // conforme a regra "assumir antes de conversar".
         iniciarMensagens();
         return;
     }

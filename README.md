@@ -173,15 +173,18 @@ Cada pessoa precisa **existir em dois lugares**:
 |---|---|---|
 | `Nome` | `"Ana Souza"` | Com **N maiúsculo** |
 | `Email` | `"ana@empresa.com"` | Com **E maiúsculo**, igual ao do Authentication |
-| `role` | `"usuario"`, `"tecnico"` ou `"admin"` | Define o que a pessoa pode ver |
+| `role` | `"usuario"`, `"tecnico"` ou `"admin"` | Sempre em **minúsculas e sem espaços**. O app normaliza (`trim().toLowerCase()`), mas grave já normalizado para evitar que a página de Relatórios (só `admin`) volte sozinha para o dashboard |
 
-> Se o login der certo no Authentication mas o e-mail não estiver em `users`, o sistema mostra "perfil não encontrado".
+> Se o login der certo no Authentication mas o e-mail não estiver em `users`, o sistema mostra "perfil não encontrado". Se o `role` estiver com maiúscula/espaço (`"Admin"`, `"tecnico "`) ou com outro texto, o perfil também é tratado como não encontrado e o login é desfeito — confira a grafia no Firestore.
+> Depois de **trocar o papel de alguém no Firestore** (ex.: `usuario` → `admin`), a pessoa precisa **sair e entrar de novo**: o papel fica em cache em `sessionStorage` (`hd:perfil`) para a navegação não reconsultar o banco a cada página. A página de Relatórios ainda confere uma vez no servidor antes de redirecionar, justamente para aceitar uma promoção recente.
 
 ### `chamados` — os chamados
 
 Criados pelo formulário. Campos principais: `numeroChamado`, `titulo`, `descricao`, `categoria`, `prioridade`, `status` (`aberto` → `analise` → `resolvido`), dados de quem abriu (`usuarioId`, `usuarioNome`, `usuarioEmail`), do técnico (`tecnicoId`, `tecnicoNome`) e datas (`dataCriacao`, `dataAssumido`, `dataResolucao`).
 
 Cada chamado tem a subcoleção **`mensagens`** (o chat): `texto`, `usuarioId`, `usuarioNome`, `data`, `editada`.
+
+**Regra do chat:** com o chamado em `aberto`, o técnico/admin **precisa assumir antes de conversar** (funções `precisaAssumirParaConversar()` / `podeConversarNoChamado()` em `services/chamados.js`). Na página `chamado.html`, o campo fica desativado com o aviso "Assuma o chamado para participar da conversa" e o envio é bloqueado com um toast. O dono do chamado (perfil `usuario`) sempre pode conversar no próprio chamado. Para valer também no servidor, reforce a mesma regra nas **regras do Firestore** (o front-end sozinho não impede escrita direta pelo console).
 
 ### `Configurações/Contadorchamados`
 
@@ -234,13 +237,41 @@ helpdesk/
 | Erro de versão do Node ao rodar o Vite | Node antigo | Instale o Node.js LTS (20.19+ ou 22.12+) |
 | `Port 5173 is in use` | Outro `npm run dev` já está aberto | Feche o outro terminal ou use o endereço que o Vite sugerir |
 | Login diz "perfil não encontrado" | E-mail não está na coleção `users` | Cadastre o documento em `users` ([seção 7](#7-dados-no-firebase)) |
+| Login desloga logo após entrar | `role` com maiúscula, espaço ou valor fora de `usuario/tecnico/admin` | Corrija o campo `role` no Firestore (minúsculas, sem espaço) e entre de novo |
+| Página de admin (Relatórios) volta sozinha para o Início | Papel ainda antigo no cache (`hd:perfil`) ou `role` grafado errado | Saia e entre de novo; confira o `role` no Firestore. A página tenta reconfirmar o papel no servidor uma vez antes de redirecionar |
+| Técnico consegue ler mas o chat fica bloqueado em chamado aberto | Comportamento esperado após a correção | Clique em "Assumir chamado" — o chat libera em tempo real quando o status vira `analise` |
 | Página volta sozinha para o Início | Seu papel não tem acesso a ela (ex.: usuário abrindo `fila.html`) | Comportamento esperado |
 | `localhost/helpdesk/dist/` mostra versão antiga | O build não foi refeito | Rode `npm run build` de novo |
 | Alterei algo em `dist/` e sumiu | `dist/` é recriada a cada build | Edite sempre `src/` e as páginas da raiz |
 
 ---
 
-## 10. Para continuar estudando
+## 10. Docker (rodar igual produção, local ou VPS)
+
+O Docker só entrega a pasta `dist/` com Nginx — o Firebase continua sendo o back-end. Não é preciso mudar código.
+
+```bash
+docker compose up --build
+# abre http://localhost:8080
+```
+
+- `Dockerfile`: etapa 1 (`node:22-alpine`) roda `npm ci` + `npm run build`; etapa 2 (`nginx:alpine`) serve a `dist/` com `nginx.conf` (`try_files $uri $uri.html`, cache longo em `/assets/*`).
+- `compose.yml`: sobe o serviço `helpdesk` em `8080:80` com `restart: unless-stopped`.
+- Para atualizar: edite `src/` ou os `.html` da raiz, refaça `docker compose up --build`. Nunca edite `dist/`.
+
+## 11. Netlify (hospedagem com deploy automático)
+
+O `netlify.toml` já deixa configurado: comando `npm run build`, pasta `dist/`, cache longo em `/assets/*` e sem cache em `/*.html`.
+
+1. Suba o projeto para o GitHub.
+2. No Netlify: *Add new site → Import an existing project* → conecte o repositório. Ele detecta o `netlify.toml` sozinho.
+3. Cada `git push` gera um deploy novo com URL própria de preview; o Firebase (Auth/Firestore) continua igual — só Confira se o domínio `*.netlify.app` está liberado onde precisar (ex.: domínios autorizados no Authentication, se usar).
+
+> Docker e Netlify são alternativos: use o Docker para rodar local/VPS com controle total, e o Netlify para hospedar com CI/CD automático. Um não "cuida" do outro.
+
+---
+
+## 12. Para continuar estudando
 
 - **[docs/ARQUITETURA.md](docs/ARQUITETURA.md)**: regras do projeto, esqueleto de uma página nova e a lista de componentes e funções disponíveis. Leia antes de criar uma tela.
 - **`styleguide.html`** (em `npm run dev`: http://localhost:5173/styleguide.html): todos os componentes visuais funcionando, com botões para testar tema, animações e toasts. É público e não precisa de login.
