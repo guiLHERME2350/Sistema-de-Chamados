@@ -373,7 +373,13 @@ function bloquear(ocupado) {
 
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    if (enviando || !perfil) return;
+    if (enviando) return;
+    if (!perfil) {
+        toast.error("Sessão inválida", {
+            message: "Seu perfil não foi encontrado. Saia e entre de novo.",
+        });
+        return;
+    }
     if (!validarTudo()) return;
 
     const dados = valores();
@@ -390,8 +396,9 @@ form.addEventListener("submit", async (e) => {
         logError(erro, "abrir-chamado:criar");
         bloquear(false);
         salvarRascunho();
+        const codigo = erro?.code ? ` (${erro.code})` : "";
         toast.error("Não foi possível abrir o chamado", {
-            message: "Verifique sua conexão e tente de novo. Seus dados foram mantidos.",
+            message: `Verifique sua conexão e tente de novo${codigo}. Seus dados foram mantidos.`,
         });
     }
 });
