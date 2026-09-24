@@ -26,9 +26,11 @@ service cloud.firestore {
     }
 
     // [DOCUMENTO DE CONFIGURAÇÃO] -> Contador sequencial usado ao abrir chamado.
-    // Qualquer logado pode ler/incrementar (senão o `usuario` não abre chamado).
-    match /Configurações/Contadorchamados {
-      allow read, write: if isLogado();
+    // "Configurações" tem acento e o compilador rejeita literal no match,
+    // por isso variável + condição. Qualquer logado pode ler/incrementar
+    // (senão o `usuario` não abre chamado).
+    match /{colecaoConfig}/Contadorchamados {
+      allow read, write: if isLogado() && colecaoConfig == "Configurações";
     }
 
     // [COLEÇÃO: CHAMADOS] -> Mapeia os tickets de atendimento
