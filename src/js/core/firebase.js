@@ -15,3 +15,16 @@ const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+
+// App Check (reCAPTCHA v3): só ativa se a site key estiver configurada.
+// Sem a key, o app funciona normalmente — ative após registrar o site no Console.
+if (import.meta.env.VITE_FIREBASE_APPCHECK_SITE_KEY) {
+    import("firebase/app-check")
+        .then(({ initializeAppCheck, ReCaptchaV3Provider }) =>
+            initializeAppCheck(app, {
+                provider: new ReCaptchaV3Provider(import.meta.env.VITE_FIREBASE_APPCHECK_SITE_KEY),
+                isTokenAutoRefreshEnabled: true,
+            })
+        )
+        .catch(() => {});
+}
