@@ -17,6 +17,7 @@ import { PRIORIDADES, STATUS, STATUS_ORDEM, prioridadeInfo } from "../utils/cons
 import { $, $$, h, render } from "../utils/dom.js";
 import { formatarDataHora, formatarNumeroChamado, normalizarBusca } from "../utils/format.js";
 import { icon } from "../utils/icons.js";
+import { logError } from "../utils/logger.js";
 import { destacar, stagger, tremer } from "../utils/motion.js";
 
 const DIAS_RESOLVIDOS = 7;
@@ -554,7 +555,7 @@ async function mover(id, novoStatus, { fantasma = null, desfazendo = false } = {
             });
         }
     } catch (erro) {
-        console.error(erro);
+        logError(erro, "fila:mover");
         if (estado.pendentes.get(id)?.token === token) estado.pendentes.delete(id);
         statusVisto.set(id, anterior);
         desenhar();
@@ -1027,7 +1028,7 @@ function observarColunasVisiveis() {
 /* ---------- Dados em tempo real ---------- */
 
 function mostrarErro(erro) {
-    console.error(erro);
+    logError(erro, "fila:observar");
     pararObservacao?.();
     pararObservacao = null;
     estado.carregado = false;

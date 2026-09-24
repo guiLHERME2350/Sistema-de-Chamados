@@ -1,0 +1,99 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helpers
+    function autenticado() {
+      return request.auth != null;
+    }
+    // Papel do solicitante (users com ID == Auth UID, campo `role`).
+    // Com exists() para não quebrar quando o doc ainda não existe.
+    function meuRole() {
+      return exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        ? get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role
+        : '';
+    }
+    function souStaff() {
+      return autenticado() && (meuRole() == 'tecnico' || meuRole() == 'admin');
+    }
+    function souAdmin() {
+      return autenticado() && meuRole() == 'admin';
+    }
+    // Dono ou tecnico/admin pode ver o chamado.
+    function podeVerChamado(chamado) {
+      return autenticado() && (
+        chamado.usuarioId == request.auth.uid || souStaff()
+      );
+    }
+
+    // USERS: leitura só do próprio doc; escrita só admin.
+    // Premissa: ID do doc == Auth UID (migrar busca por Email).
+    match /users/{userId} {
+      // Get direto do próprio doc, ou doc cujo Email bate com o Auth.
+      allow get: if autenticado() &&
+        (request.auth.uid == userId || resource.data.Email == request.auth.token.email);
+      // List só passa nos docs cujo Email == Auth (query sem filtro where Email falha — é o esperado).
+      allow list: if autenticado() && resource.data.Email == request.auth.token.email;
+      allow create, update, delete: if souAdmin();
+    }
+
+    // CHAMADOS
+    match /chamados/{chamadoId} {
+      allow get: if podeVerChamado(resource.data);
+      // Usuario lista só os próprios (where usuarioId); staff lista tudo.
+      allow list: if autenticado() && (
+        resource.data.usuarioId == request.auth.uid || souStaff()
+      );
+      allow create: if autenticado()
+        && request.resource.data.usuarioId == request.auth.uid
+        && request.resource.data.status == 'aberto'
+        && request.resource.data.titulo is string
+        && request.resource.data.titulo.size() >= 1
+        && request.resource.data.titulo.size() <= 80
+        && request.resource.data.descricao is string
+        && request.resource.data.descricao.size() >= 10
+        && request.resource.data.descricao.size() <= 5000;
+      // Assumir/mover/resolver só tecnico/admin; dono não altera; delete negado.
+      allow update: if souStaff()
+        && request.resource.data.usuarioId == resource.data.usuarioId
+        && request.resource.data.status in ['aberto', 'analise', 'resolvido'];
+      allow delete: if false;
+
+      // MENSAGENS
+      match /mensagens/{mensagemId} {
+        allow get, list: if podeVerChamado(get(/databases/$(database)/documents/chamados/$(chamadoId)).data);
+        allow create: if autenticado()
+          && (
+            get(/databases/$(database)/documents/chamados/$(chamadoId)).data.usuarioId == request.auth.uid
+            || get(/databases/$(database)/documents/chamados/$(chamadoId)).data.tecnicoId == request.auth.uid
+            || souStaff()
+          )
+          && request.resource.data.usuarioId == request.auth.uid
+          && request.resource.data.texto is string
+          && request.resource.data.texto.size() >= 1
+          && request.resource.data.texto.size() <= 2000;
+        // Só o autor edita o próprio texto.
+        allow update: if autenticado()
+          && resource.data.usuarioId == request.auth.uid
+          && request.resource.data.usuarioId == resource.data.usuarioId
+          && request.resource.data.texto is string
+          && request.resource.data.texto.size() >= 1
+          && request.resource.data.texto.size() <= 2000;
+        allow delete: if false;
+      }
+    }
+
+    // CONTADOR: qualquer logado pode incrementar o sequencial ao abrir chamado;
+    // demais docs de Configurações seguem restritos a staff.
+    match /Configurações/Contadorchamados {
+      allow get: if autenticado();
+      allow list: if false;
+      allow create, update: if autenticado();
+      allow delete: if souAdmin();
+    }
+    match /Configurações/{docId} {
+      allow get, list: if autenticado();
+      allow create, update, delete: if souStaff();
+    }
+  }
+}

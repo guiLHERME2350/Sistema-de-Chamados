@@ -4,6 +4,7 @@ import { entrar, redirecionarSeLogado } from "../core/session.js";
 import { alternarTema, temaAtual } from "../core/theme.js";
 import { $, $$, h, render } from "../utils/dom.js";
 import { icon } from "../utils/icons.js";
+import { logError } from "../utils/logger.js";
 import { tremer } from "../utils/motion.js";
 
 redirecionarSeLogado();
@@ -177,7 +178,7 @@ form.addEventListener("submit", async (evento) => {
         toast.flash("success", "Bem-vindo(a) de volta!");
         window.location.href = "dashboard.html";
     } catch (erro) {
-        console.error(erro);
+        logError(erro, "login:entrar");
         const info = MENSAGENS_ERRO[erro?.code] || ERRO_GENERICO;
         mostrarAlerta(info);
         tremer(card);

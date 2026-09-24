@@ -12,6 +12,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../core/firebase.js";
 import { paraData } from "../utils/format.js";
+import { silentError } from "../utils/logger.js";
 
 /**
  * @typedef {Object} Mensagem
@@ -45,7 +46,7 @@ function normalizar(snapshot) {
  * @param {(mensagens: Mensagem[], novas: string[]) => void} callback  novas = ids adicionados após a 1ª carga
  * @returns {() => void}
  */
-export function observarMensagens(chamadoId, callback, aoErrar = console.error) {
+export function observarMensagens(chamadoId, callback, aoErrar = silentError) {
     let primeiro = true;
     return onSnapshot(
         query(ref(chamadoId), orderBy("data", "asc")),

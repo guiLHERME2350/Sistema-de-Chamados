@@ -24,6 +24,7 @@ import { MENU } from "../utils/constants.js";
 import { h, render } from "../utils/dom.js";
 import { formatarNumeroChamado, normalizarBusca } from "../utils/format.js";
 import { icon } from "../utils/icons.js";
+import { logError } from "../utils/logger.js";
 import { badgeStatus } from "./badges.js";
 import { skeleton } from "./skeleton.js";
 
@@ -442,7 +443,7 @@ function carregarChamados() {
             chamados = lista;
         })
         .catch((erro) => {
-            console.error(erro);
+            logError(erro, "command-palette:carregarChamados");
             erroChamados = true;
         })
         .finally(() => {

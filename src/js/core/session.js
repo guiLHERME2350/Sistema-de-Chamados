@@ -7,8 +7,9 @@ import {
     signInWithEmailAndPassword,
     signOut,
 } from "firebase/auth";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, limit, query, where } from "firebase/firestore";
 import { auth, db } from "./firebase.js";
+import { logError } from "../utils/logger.js";
 
 const CHAVE_CACHE = "hd:perfil";
 
@@ -58,13 +59,41 @@ function limparCache() {
     }
 }
 
-// TODO(backend): trocar a varredura da coleção por doc(db, "users", uid).
+// Busca o perfil por UID (doc `users/{uid}`); mantém fallback por Email
+// para bases antigas onde o doc ainda não usa o UID como ID.
 async function buscarPerfil(usuario) {
+    // 1. Caminho novo e barato: get direto, 1 leitura.
+    try {
+        const direto = await getDoc(doc(db, "users", usuario.uid));
+        if (direto.exists()) {
+            const dados = direto.data();
+            const role = String(dados.role || "").trim().toLowerCase();
+            if (!TODOS_OS_PAPEIS.includes(role)) {
+                logError({ code: "app/papel-invalido" }, "session:buscarPerfil");
+                return null;
+            }
+            return {
+                uid: usuario.uid,
+                nome: dados.Nome || dados.nome || usuario.email,
+                email: dados.Email || dados.email || usuario.email,
+                role,
+            };
+        }
+    } catch {
+        // sem permissão ou fora do ar: tenta o fallback abaixo
+    }
+
+    // 2. Fallback transitório: query filtrada por Email (exige índice simples,
+    // 1 leitura por doc correspondente). Remover quando todos os users forem `users/{uid}`.
     const emailAtual = usuario.email?.trim().toLowerCase();
-    const snapshot = await getDocs(collection(db, "users"));
-    const documento = snapshot.docs.find(
-        (d) => String(d.data().Email || "").trim().toLowerCase() === emailAtual
+    if (!emailAtual) return null;
+    const snapshot = await getDocs(
+        query(collection(db, "users"), where("Email", "==", usuario.email), limit(5))
     );
+    const documento =
+        snapshot.docs.find(
+            (d) => String(d.data().Email || "").trim().toLowerCase() === emailAtual
+        ) || snapshot.docs[0];
 
     if (!documento) return null;
 
@@ -73,13 +102,13 @@ async function buscarPerfil(usuario) {
     // Normaliza para o contrato do app: "usuario" | "tecnico" | "admin".
     const role = String(dados.role || "").trim().toLowerCase();
     if (!TODOS_OS_PAPEIS.includes(role)) {
-        console.error(`Papel inválido em users/${documento.id}: ${JSON.stringify(dados.role)}. Esperado um de: ${TODOS_OS_PAPEIS.join(", ")}.`);
+        logError({ code: "app/papel-invalido" }, "session:buscarPerfil");
         return null;
     }
     return {
         uid: usuario.uid,
-        nome: dados.Nome || usuario.email,
-        email: dados.Email || usuario.email,
+        nome: dados.Nome || dados.nome || usuario.email,
+        email: dados.Email || dados.email || usuario.email,
         role,
     };
 }
@@ -110,7 +139,7 @@ export async function exigirSessao(papeis = TODOS_OS_PAPEIS) {
     if (!perfil) {
         perfil = await buscarPerfil(usuario);
         if (!perfil) {
-            console.error("Usuário não encontrado na coleção users.");
+            logError({ code: "app/perfil-nao-encontrado" }, "session:exigirSessao");
             await sair();
             return new Promise(() => {});
         }

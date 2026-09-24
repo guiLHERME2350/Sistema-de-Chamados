@@ -15,6 +15,7 @@ import { CATEGORIAS, PRIORIDADES, STATUS, prioridadeInfo } from "../utils/consta
 import { h, render } from "../utils/dom.js";
 import { formatarDataHora, formatarNumero, formatarNumeroChamado, normalizarBusca, plural, tempoRelativo } from "../utils/format.js";
 import { icon } from "../utils/icons.js";
+import { logError } from "../utils/logger.js";
 import { destacar, stagger } from "../utils/motion.js";
 
 const POR_PAGINA = 20;
@@ -633,7 +634,7 @@ function observar() {
             primeira = false;
         },
         (erro) => {
-            console.error(erro);
+            logError(erro, "chamados:observar");
             pararDeObservar = null;
             situacao = "erro";
             mostrarErro();

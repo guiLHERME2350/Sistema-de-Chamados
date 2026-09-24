@@ -29,6 +29,7 @@ import {
     plural,
 } from "../utils/format.js";
 import { icon } from "../utils/icons.js";
+import { logError } from "../utils/logger.js";
 import { animarNumero, stagger } from "../utils/motion.js";
 
 const DIA = 24 * 60 * 60 * 1000;
@@ -787,7 +788,7 @@ function mostrarSkeleton() {
 }
 
 function mostrarErro(erro) {
-    console.error(erro);
+    logError(erro, "relatorios:carregar");
     destruirGraficos();
     render(el.kpis);
     for (const k of Object.keys(kpiEls)) delete kpiEls[k];

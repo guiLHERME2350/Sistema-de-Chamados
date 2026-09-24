@@ -20,6 +20,7 @@ import {
     tempoRelativo,
 } from "../utils/format.js";
 import { icon } from "../utils/icons.js";
+import { logError } from "../utils/logger.js";
 import { animarNumero, destacar, pulsar, stagger } from "../utils/motion.js";
 
 const MAX_RECENTES = 5;
@@ -276,7 +277,7 @@ async function assumir(c, botao) {
             duration: 8000,
         });
     } catch (erro) {
-        console.error(erro);
+        logError(erro, "dashboard:assumir");
         toast.error("Não foi possível assumir o chamado", { message: "Verifique sua conexão e tente novamente." });
     } finally {
         if (botao.isConnected) {
@@ -455,7 +456,7 @@ function aoReceber(chamados, mudancas) {
 }
 
 function aoErrar(erro) {
-    console.error(erro);
+    logError(erro, "dashboard:observar");
     pararDeObservar?.();
     pararDeObservar = null;
     toast.error("Não foi possível carregar o painel", { message: "Verifique sua conexão e tente novamente." });

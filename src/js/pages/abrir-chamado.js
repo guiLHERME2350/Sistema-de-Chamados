@@ -8,6 +8,7 @@ import { CATEGORIAS, PRIORIDADES, prioridadeInfo } from "../utils/constants.js";
 import { $, $$, h, render } from "../utils/dom.js";
 import { formatarHora, formatarNumeroChamado } from "../utils/format.js";
 import { icon } from "../utils/icons.js";
+import { logError } from "../utils/logger.js";
 import { comTransicao, tocar, tremer } from "../utils/motion.js";
 
 const CHAVE_RASCUNHO = "hd:rascunho-chamado";
@@ -386,7 +387,7 @@ form.addEventListener("submit", async (e) => {
         bloquear(false);
         await mostrarSucesso({ id, numero, ...dados });
     } catch (erro) {
-        console.error(erro);
+        logError(erro, "abrir-chamado:criar");
         bloquear(false);
         salvarRascunho();
         toast.error("Não foi possível abrir o chamado", {

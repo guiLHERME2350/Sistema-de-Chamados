@@ -16,6 +16,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../core/firebase.js";
 import { paraData } from "../utils/format.js";
+import { silentError } from "../utils/logger.js";
 
 /**
  * @typedef {Object} Chamado
@@ -84,7 +85,7 @@ export async function listarChamados(perfil) {
  * @param {(chamados: Chamado[], mudancas: {tipo: string, id: string}[]) => void} callback
  * @returns {() => void} função para parar de observar
  */
-export function observarChamados(perfil, callback, aoErrar = console.error) {
+export function observarChamados(perfil, callback, aoErrar = silentError) {
     let primeiro = true;
     return onSnapshot(
         consultaPorPerfil(perfil),
@@ -110,7 +111,7 @@ export async function obterChamado(id) {
  * @param {(chamado: Chamado|null) => void} callback
  * @returns {() => void}
  */
-export function observarChamado(id, callback, aoErrar = console.error) {
+export function observarChamado(id, callback, aoErrar = silentError) {
     return onSnapshot(
         doc(db, "chamados", id),
         (snapshot) => callback(snapshot.exists() ? normalizar(snapshot) : null),

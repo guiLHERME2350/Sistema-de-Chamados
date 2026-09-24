@@ -3,12 +3,12 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBEaI6PRIxmMHaW_VkAH_oozN1-Z9RPh9k",
-    authDomain: "sistemadechamados-2c271.firebaseapp.com",
-    projectId: "sistemadechamados-2c271",
-    storageBucket: "sistemadechamados-2c271.firebasestorage.app",
-    messagingSenderId: "215120397344",
-    appId: "1:215120397344:web:67165311411c68fecce845",
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyBEaI6PRIxmMHaW_VkAH_oozN1-Z9RPh9k",
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "sistemadechamados-2c271.firebaseapp.com",
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "sistemadechamados-2c271",
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "sistemadechamados-2c271.firebasestorage.app",
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "215120397344",
+    appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:215120397344:web:67165311411c68fecce845",
 };
 
 const app = initializeApp(firebaseConfig);

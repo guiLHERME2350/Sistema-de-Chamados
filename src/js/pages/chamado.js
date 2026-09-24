@@ -45,6 +45,7 @@ import {
     primeiroNome,
 } from "../utils/format.js";
 import { icon } from "../utils/icons.js";
+import { logError } from "../utils/logger.js";
 import { destacar, tocar } from "../utils/motion.js";
 
 const AGRUPAR_MS = 5 * 60 * 1000;
@@ -418,7 +419,7 @@ async function executarAcao(botao, acao) {
         await acao.executar();
         toast.success(acao.sucesso, { message: `${numeroFormatado()} · ${chamado.titulo}` });
     } catch (erro) {
-        console.error(erro);
+        logError(erro, "chamado:acao");
         toast.error(acao.erro, { message: "Verifique sua conexão e tente novamente." });
         botao.removeAttribute("aria-busy");
     } finally {
@@ -715,7 +716,7 @@ function iniciarMensagens() {
             renderConversa({ novas });
         },
         (erro) => {
-            console.error(erro);
+            logError(erro, "chamado:mensagens");
             pararMensagens = null;
             assinaturaConversa = "";
             el.lista.removeAttribute("aria-busy");
@@ -798,7 +799,7 @@ function abrirEdicao(linha, mensagemId) {
             fechar();
             destacar(bolha);
         } catch (erro) {
-            console.error(erro);
+            logError(erro, "chamado:editarMensagem");
             toast.error("Não foi possível editar a mensagem", { message: "Seu texto foi mantido. Tente novamente." });
             salvar.removeAttribute("aria-busy");
             campo.readOnly = false;
@@ -907,7 +908,7 @@ function prepararComposer() {
         try {
             await enviarMensagem(chamado.id, texto, perfil);
         } catch (erro) {
-            console.error(erro);
+            logError(erro, "chamado:enviarMensagem");
             if (!el.campo.value.trim()) el.campo.value = texto;
             atualizarBotao();
             autoAjustar(el.campo);
@@ -991,7 +992,7 @@ if (!id) {
     prepararComposer();
 
     pararChamado = observarChamado(id, aoReceberChamado, (erro) => {
-        console.error(erro);
+        logError(erro, "chamado:observarChamado");
         const negado = erro?.code === "permission-denied";
         sairCom(
             negado ? "Acesso negado" : "Não foi possível abrir o chamado",
